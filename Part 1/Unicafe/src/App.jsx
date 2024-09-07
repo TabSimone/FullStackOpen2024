@@ -12,7 +12,7 @@ const Button = ({ actionToDo, text }) => {
 };
 
 const StatisticLine = (props) => {
-  return <p>{props.text} {props.value}</p>
+  return <tr> <td style={{ textAlign: 'left' }}>{props.text} </td> <td style={{ textAlign: 'left' }}> {props.value}</td> </tr>
 };
 
 // Statistics Component
@@ -43,12 +43,15 @@ const Statistics = ({ good, neutral, bad }) => {
   }
   return (
     <div>
+      <h1>Statistics</h1>
+      <table>
       <StatisticLine text="Good" value ={good} />
       <StatisticLine text="Neutral" value ={neutral} />
       <StatisticLine text="Bad" value ={bad} />
       <StatisticLine text="All" value ={totalFeedback} />
       <StatisticLine text="Average" value ={returnAverage()} />
       <StatisticLine text="Positive" value={`${returnPositive()} %`} />
+      </table>
     </div>
   );
 };
