@@ -1,6 +1,22 @@
 import { Component, useState } from 'react'
 
+const MostVoted = (props) => {
+  let counter = 0;
+  let position = 0;
+  for (let i = 0; i < props.array.length; i++) {
+    if(counter < props.array[i]){
+      counter = props.array[i]
+      position = i
+    }
+  }
 
+  return (
+    <div>
+    <p> {props.anecdotes[position]} </p>  
+    <p> {counter} </p> 
+    </div>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -24,7 +40,7 @@ const App = () => {
   }
 
   const changeVote = () => {
-    const copy = { ...points }
+    const copy = points.slice()
     copy[selected] += 1
     return setVote(copy)
   }
@@ -37,6 +53,10 @@ const App = () => {
       <button onClick={changeAnedocte}>next anecdote</button>
       <button onClick={changeVote}>vote</button>
       {points[selected]}
+      <h1>log all array of votes</h1>
+      <p>{Array.from(points).join(', ')}</p> {/* Display all points */}
+      <MostVoted array = {points} anecdotes = {anecdotes}/>
+
 
     </div>
     
