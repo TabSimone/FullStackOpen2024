@@ -1,12 +1,11 @@
 import React from 'react';
 
-//const Total 
-
 const Course = ({ course }) => {
   return (
     <div>
       <Header courseName={course.name} />
       <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   );
 };
@@ -35,6 +34,22 @@ const Part = ({ part }) => {
   );
 };
 
+const Total = ({ parts }) => {
+  //For loop
+  /*
+  for(let i = 0; i<parts.length; i++){
+    total = total + parts[i]['exercises']
+  }*/
+
+  //When you perform comulative operation on arrays use reduce
+  const total = parts.reduce(function(total, part) {
+    return total + 
+    part.exercises
+  } , 0);
+
+
+  return <p><b> total of {total} exercises </b></p>
+};
 
 const App = () => {
   const course = {
@@ -53,8 +68,13 @@ const App = () => {
       },
       {
         name: 'State of a component',
-        exercises: 14,
+        exercises: 44,
         id: 3
+      },
+      {
+        name: 'State of a component part 2',
+        exercises: 11,
+        id: 4
       }
     ]
   };
