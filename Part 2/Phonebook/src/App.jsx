@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -56,39 +59,21 @@ const App = () => {
     }
   };
 
-  const Contacts = () => {
-    const contactList = persons
-      .filter(item => newFilter === '' || item.name.startsWith(newFilter))
-      .map(item => (
-        <li key={item.name}>
-          {item.name} {item.number}
-        </li>
-      ));
-  
-    return <ul>{contactList}</ul>;
-  };
-
 
   return (
     <div>
       <h2>Filter</h2>
-      <form onSubmit={handleSubmit}>
-        <div>filter show on: <input type="text" value={newFilter} onChange={handleChangeFilter} /></div>
-        <div>
-        </div>
-      </form>
+      <Filter newFilter={newFilter} handleChangeFilter={handleChangeFilter} />
       <h2>Add New Contact</h2>
-      <form onSubmit={handleSubmit}>
-        <div>number: <input type="text" value={newNumber} onChange={handleChangeNumber} /></div>
-        <div>
-          name:         <input type="text" value={newName} onChange={handleChangeName} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+      newName = {newName}
+      newNumber = {newNumber}
+      handleChangeName = {handleChangeName}
+      handleChangeNumber = {handleChangeNumber}
+      handleSubmit = {handleSubmit}
+       />
       <h2>Numbers</h2>
-      <Contacts />
+      <Persons persons = {persons} newFilter = {newFilter}/>
 
     </div>
   )
