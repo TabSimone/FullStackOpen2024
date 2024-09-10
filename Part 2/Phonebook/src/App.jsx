@@ -14,19 +14,39 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const newContact = { name: newName };
+    let counter = 0
 
-    setNewName('');
+    persons.forEach(function (item) {
+      if (item.name === newName) {
+        counter++;
+      }
+    })
 
-    return setPersons([...persons, newContact]);
+    if (counter == 0) {
+      console.log('There are no duplicates');
+
+      persons.map((item) => <li key={item.name}>{item.name}</li>)
+
+      const newContact = { name: newName };
+
+      setNewName('');
+
+      return setPersons([...persons, newContact]);
+
+    } else {
+      setNewName('');
+
+      alert('Hello! This is an alert message.');
+
+    }
   };
 
   const Contacts = () => {
 
-    const contactList = persons.map((item) => <li key = {item.name}>{item.name}</li>)
+    const contactList = persons.map((item) => <li key={item.name}>{item.name}</li>)
 
     return contactList
-  
+
   }
 
   return (
@@ -34,7 +54,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name:         <input type="text" value={newName}  onChange={handleChange} />
+          name:         <input type="text" value={newName} onChange={handleChange} />
         </div>
         <div>
           <button type="submit">add</button>
