@@ -2,12 +2,19 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+      number : '12341434'
+     }
   ])
 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
-  const handleChange = (event) => {
+  const handleChangeNumber = (event) => {
+    setNewNumber(event.target.value);
+  };
+
+  const handleChangeName= (event) => {
     setNewName(event.target.value);
   };
 
@@ -27,23 +34,28 @@ const App = () => {
 
       persons.map((item) => <li key={item.name}>{item.name}</li>)
 
-      const newContact = { name: newName };
+      const newContact = { name: newName, number: newNumber };
 
       setNewName('');
+      setNewNumber('');
 
       return setPersons([...persons, newContact]);
 
     } else {
+      alert('Hello! This is an alert message for duplicate on: ' + newName);
+      //Alternative is template literals alert(`Hello! This is an alert message for duplicate on: ${newName}`);
+      setNewNumber('');
       setNewName('');
 
-      alert('Hello! This is an alert message.');
+
+      
 
     }
   };
 
   const Contacts = () => {
 
-    const contactList = persons.map((item) => <li key={item.name}>{item.name}</li>)
+    const contactList = persons.map((item) => <li key={item.name}>{item.name} {item.number}</li>)
 
     return contactList
 
@@ -53,8 +65,9 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
+      <div>number: <input  type="text" value={newNumber} onChange={handleChangeNumber} /></div> 
         <div>
-          name:         <input type="text" value={newName} onChange={handleChange} />
+          name:         <input type="text" value={newName} onChange={handleChangeName} />
         </div>
         <div>
           <button type="submit">add</button>
