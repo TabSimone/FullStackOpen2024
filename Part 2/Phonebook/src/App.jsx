@@ -42,30 +42,38 @@ const App = () => {
 
     const isDuplicate = persons.some(item => item.name === newName);
 
+    const newContact = { name: newName, number: newNumber };
+
     if (!isDuplicate) {
-      console.log('There are no duplicates');
-
-      const newContact = { name: newName, number: newNumber };
-
-      contactsService.create( newContact ).then(response => {
+      contactsService.create(newContact).then(response => {
         setPersons([...persons, response.data]); // Use the response data
         setNewName('');
         setNewNumber('');
       })
-      .catch(error => {
-        console.error('Error adding contact:', error);
-        alert('There was an error adding the contact.');
-      });
-
+        .catch(error => {
+          console.error('Error adding contact:', error);
+          alert('There was an error adding the contact.');
+        });
     } else {
-      alert('Hello! This is an alert message for duplicate on: ' + newName);
+      if (window.confirm("Do you really want to leave?")) {
+        const found = persons.find(item => item.name === newName);
+        contactsService.update(found.id, newContact).then(response => {
+          console.log('Update successful:');
+          const newPersons = persons.map(contact => 
+        contact.name === newName ? { ...contact, number: newNumber } : contact
+        )
+        setPersons(newPersons)
+        })
+        .catch(error => {
+          console.error('Update failed:', error);
+        });
+      }
       //Alternative is template literals alert(`Hello! This is an alert message for duplicate on: ${newName}`);
       setNewNumber('');
       setNewName('');
 
     }
   };
-
 
   return (
     <div>
@@ -80,8 +88,7 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter} setPersons = {setPersons}/>
-
+      <Persons persons={persons} newFilter={newFilter} setPersons={setPersons} />
     </div>
   )
 }
