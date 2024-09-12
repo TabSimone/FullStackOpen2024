@@ -8,10 +8,7 @@ import contactsService from './services/Contacts'
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-
-  ])
-
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -25,7 +22,6 @@ const App = () => {
   }
 
   useEffect(hook, [])
-
 
   const handleChangeFilter = (event) => {
     setNewFilter(event.target.value);
@@ -44,25 +40,22 @@ const App = () => {
 
     let counter = 0
 
-    persons.forEach(function (item) {
-      if (item.name === newName) {
-        counter++;
-      }
-    })
+    const isDuplicate = persons.some(item => item.name === newName);
 
-    if (counter == 0) {
+    if (!isDuplicate) {
       console.log('There are no duplicates');
-
-      persons.map((item) => <li key={item.name}>{item.name}</li>)
 
       const newContact = { name: newName, number: newNumber };
 
-      contactsService.create({ newContact })
-
-      setNewName('');
-      setNewNumber('');
-
-      return setPersons([...persons, newContact]);
+      contactsService.create( newContact ).then(response => {
+        setPersons([...persons, response.data]); // Use the response data
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        console.error('Error adding contact:', error);
+        alert('There was an error adding the contact.');
+      });
 
     } else {
       alert('Hello! This is an alert message for duplicate on: ' + newName);
@@ -87,7 +80,7 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter} />
+      <Persons persons={persons} newFilter={newFilter} setPersons = {setPersons}/>
 
     </div>
   )

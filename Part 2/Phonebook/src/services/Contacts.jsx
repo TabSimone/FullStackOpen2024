@@ -5,12 +5,16 @@ const getAll = () => {
   return axios.get(baseUrl)
 }
 
-const create = newObject => {
-  return axios.post(baseUrl, newObject)
+const create = newContact => {
+  return axios.post(baseUrl, newContact)
 }
 
+const deleteContactApi = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+}
 
 export default { 
   getAll: getAll, 
-  create: create
+  create: create,
+  delete: deleteContactApi
 }
