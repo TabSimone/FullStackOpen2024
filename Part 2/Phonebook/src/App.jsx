@@ -4,6 +4,8 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
 import React, { useEffect } from 'react';
+import contactsService from './services/Contacts'
+
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -54,6 +56,8 @@ const App = () => {
       persons.map((item) => <li key={item.name}>{item.name}</li>)
 
       const newContact = { name: newName, number: newNumber };
+
+      contactsService.create({ newContact })
 
       setNewName('');
       setNewNumber('');
