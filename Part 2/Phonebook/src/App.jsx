@@ -2,16 +2,18 @@ import { useState } from 'react';
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import axios from 'axios'
 import React, { useEffect } from 'react';
 import contactsService from './services/Contacts'
-
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newMessage, setNewMessage] = useState('')
 
   const hook = () => {
     axios
@@ -49,6 +51,7 @@ const App = () => {
         setPersons([...persons, response.data]); // Use the response data
         setNewName('');
         setNewNumber('');
+        setNewMessage('Added' ${newName} );
       })
         .catch(error => {
           console.error('Error adding contact:', error);
@@ -77,6 +80,8 @@ const App = () => {
 
   return (
     <div>
+      <h1>Phonebook</h1>
+      <>{newMessage && <Notification message={newMessage} />}</>
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleChangeFilter={handleChangeFilter} />
       <h2>Add New Contact</h2>
