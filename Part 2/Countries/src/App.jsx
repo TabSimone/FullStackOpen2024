@@ -74,7 +74,10 @@ const App = () => {
       {isVisibleFiltered && (
         <ul>
           {countriesFiltered.map((country) => (
-            <li key={country.name.common}>{country.name.common}</li>
+            <div>
+              <li key={country.name.common}>{country.name.common}</li>
+              <button onClick={() => { fetchSingleCountry(country.name.common) }}> show </button>
+            </div>
           ))}
         </ul>
       )}
