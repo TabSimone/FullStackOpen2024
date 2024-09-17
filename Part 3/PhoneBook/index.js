@@ -69,12 +69,31 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log(body.name)
+
+  if (!body.name)  {
+    return response.status(400).json({ 
+      error: 'name missing' 
+    })
+  }
+
+  if (!body.number)  {
+    return response.status(400).json({ 
+      error: 'number missing' 
+    })
+  }
 
   
-  if (!body)  {
+  //Check for same name
+  let counter = 0
+  persons.forEach(person => {
+    if(person.name == body.name){
+      counter++
+    }
+  });
+
+  if (counter!=0)  {
     return response.status(400).json({ 
-      error: 'content missing' 
+      error: 'name already exists' 
     })
   }
 
