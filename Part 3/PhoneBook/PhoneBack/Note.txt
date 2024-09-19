@@ -1,0 +1,7 @@
+http://localhost:3001
+fly apps open
+https://phoneback-red-morning-8600.fly.dev/
+
+The script npm run build:ui builds the frontend and copies the production version under the backend repository. The script npm run deploy releases the current backend to Fly.io.
+npm run deploy:full combines these two scripts, i.e., npm run build:ui and npm run deploy.
+There is also a script npm run logs:prod to show the Fly.io logs.
