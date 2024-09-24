@@ -12,10 +12,10 @@ const url =
 
 mongoose.set('strictQuery',false)
 
-mongoose.connect(url);
+mongoose.connect(url)
 
 //Get command line argument
-const args = process.argv.slice(3); 
+const args = process.argv.slice(3)
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -39,10 +39,10 @@ if (args.length < 2) {
     phone: args[1],
     important: true,
   })
-  
-  person.save().then(result => {
+
+  person.save().then(() => {
     console.log('person saved!')
-    console.log(args[0] + " " + args[1])
+    console.log(args[0] + ' ' + args[1])
     mongoose.connection.close()
   })
 

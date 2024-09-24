@@ -1,20 +1,20 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-require('dotenv').config();
+require('dotenv').config()
 const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.json())
 
-const args = process.argv.slice(3); 
+//onst args = process.argv.slice(3)
 
-const path = require('path');
-app.use(express.static(path.join(__dirname, 'dist')));
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'dist')))
 // Serve index.html for the root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -22,18 +22,20 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/info', (request, response) => {
-  const requestTime = new Date();
-  const length = persons.length; 
-  response.send(`
-    <p>Number of persons: ${length}</p>
-    <p>Request received at: ${requestTime.toISOString()}</p>
-  `);
-});
+app.get('/info', (request, response, next) => {
+  const requestTime = new Date()
+  Person.find({}).then(persons => {
+    const count = persons.length
+    response.send(`
+      <p>Number of persons: ${count}</p>
+      <p>Request received at: ${requestTime.toISOString()}</p>
+    `)
+  }).catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -50,20 +52,16 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+/*
 const generateId = () => {
   const maxId = persons.length > 0
     ? Math.max(...persons.map(n => Number(n.id)))
     : 0
   return String(maxId + 1)
-}
+}*/
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
-
-  if (body.name === undefined || body.phone === undefined) {
-    return response.status(400).json({ error: 'Missing content' }); 
-  }
-
 
   const person = new Person({
     name: body.name,
@@ -74,7 +72,7 @@ app.post('/api/persons', (request, response) => {
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
-  })
+  }).catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -98,7 +96,11 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id!' })
-  } 
+  }
+  if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: 'incompatible fields' })
+  }
+
 
   next(error)
 }
