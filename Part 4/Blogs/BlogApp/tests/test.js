@@ -1,10 +1,10 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
-const blogs  = require('./test_arguments')
+const { blogs }  = require('./test_arguments')
 
 
-describe('total likes', () => {
+describe('4.3-4.4', () => {
     const listWithOneBlog = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -26,4 +26,25 @@ describe('total likes', () => {
       const result = listHelper.totalLikes(listWithOneBlog)
       assert.strictEqual(result, 5)
     })
+
+  })
+
+
+  describe('4.5-4.6-4.7', () => {
+      
+    test('which blog has the most likes', () => {
+        const result = listHelper.favoriteBlog(blogs)
+        assert.strictEqual(result, 1000)
+    })
+
+    test('which author has most blogs', () => {
+      const result = listHelper.mostBlogs(blogs);
+      assert.strictEqual(result.blogs, 6); // This should pass now
+    })
+
+    test('which author has most likes', () => {
+      const result = listHelper.mostLikes(blogs);
+      assert.strictEqual(result.author, "Robert C. Martin"); // This should pass now
+    })
+
   })
