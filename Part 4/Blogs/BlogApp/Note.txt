@@ -6,3 +6,5 @@ The script npm run build:ui builds the frontend and copies the production versio
 The script npm run deploy releases the current backend to Fly.io.
 npm run deploy:full combines these two scripts, i.e., npm run build:ui and npm run deploy.
 There is also a script npm run logs:prod to show the Fly.io logs.
+
+npm test -- --test-only
