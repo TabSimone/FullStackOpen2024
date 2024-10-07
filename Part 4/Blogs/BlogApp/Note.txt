@@ -8,3 +8,10 @@ npm run deploy:full combines these two scripts, i.e., npm run build:ui and npm r
 There is also a script npm run logs:prod to show the Fly.io logs.
 
 npm test -- --test-only
+
+
+
+-----------
+test utente non corretto con corretto messaggio errore. --test-concurrency=1
+eslint in tutto il progetto
+correggere delete e patch
