@@ -25,12 +25,14 @@ app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor); 
 
+// Route handlers
 app.use(blogsRouter)
 app.use(usersRouter)
-
 app.use('/api/login', loginRouter)
 
+// Error handling middleware
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
