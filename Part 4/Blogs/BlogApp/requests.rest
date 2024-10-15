@@ -6,7 +6,7 @@ POST http://localhost:3003/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-  "username": "giovanni234",
+  "username": "testing user",
   "name": "H. Simpson 22",
   "password": "giovanni23"
 }
@@ -30,7 +30,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdpb3Zhbm5pMiIsImlkIjoiNjcwNDExZDVjZmFiZTM3NDQ4NTMyNjRkIiwiaWF0IjoxNzI4MzE5OTc5fQ.Cvwy_sl1jMPbMIYBwMBxpIdPEF7EKRlUUHSsSGrzBp4
 
 {
-  "title": "Testing MIDDLEWARE 09-10",
+  "title": "Testing MIDDLEWARE 15-10",
   "author": "H. Simpson",
   "url": "http://example.com/a-",
   "likes": 12

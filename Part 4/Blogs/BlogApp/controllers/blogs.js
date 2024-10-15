@@ -7,9 +7,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const middleware = require('../utils/middleware');
 
-// Use tokenExtractor middleware for POST and DELETE requests
-blogsRouter.use(middleware.tokenExtractor);
-
 // GET all blogs
 blogsRouter.get('/api/blogs', async (request, response, next) => {
   try {
@@ -35,10 +32,10 @@ blogsRouter.get('/api/blogs', async (request, response, next) => {
 });
 
 // POST a new blog
-blogsRouter.post('/api/blogs', middleware.tokenExtractor, async (request, response, next) => {
+blogsRouter.post('/api/blogs', middleware.tokenExtractor, middleware.userExtractor, async (request, response, next) => {
   try {
     const blog = new Blog(request.body);
-
+    
     // The user is extracted by the tokenExtractor middleware
     const user = request.user;
     blog.username = user.username;
@@ -51,19 +48,19 @@ blogsRouter.post('/api/blogs', middleware.tokenExtractor, async (request, respon
 });
 
 // DELETE a blog
-blogsRouter.delete('/api/blogs/:title', middleware.tokenExtractor, async (request, response, next) => {
+blogsRouter.delete('/api/blogs/:title', middleware.tokenExtractor, middleware.userExtractor, async (request, response, next) => {
   const title = request.params.title;
 
   // The user is extracted by the tokenExtractor middleware
   const user = request.user;
 
-  const blog = await Blog.findOne({ 'title': title, 'username': user.username });
-
-  if (!blog) {
-    return response.status(404).json({ error: 'Blog not found or user does not have permission' });
-  }
-
   try {
+    const blog = await Blog.findOne({ 'title': title, 'username': user.username });
+
+    if (!blog) {
+      return response.status(404).json({ error: 'Blog not found or user does not have permission' });
+    }
+
     const result = await Blog.deleteOne({ _id: blog._id });
 
     // Check if a document was deleted
