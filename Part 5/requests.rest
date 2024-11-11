@@ -1,0 +1,42 @@
+### Get users
+GET http://localhost:3003/api/users
+
+### Post a new user
+POST http://localhost:3003/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "test",
+  "name": "test",
+  "password": "test"
+}
+
+### Get blogs
+GET http://localhost:3003/api/blogs
+
+
+### Login of a new user
+POST http://localhost:3003/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "password": "test",
+  "username": "test"
+}
+
+### New blog by giovanni
+POST http://localhost:3003/api/blogs HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdpb3Zhbm5pMiIsImlkIjoiNjcwNDExZDVjZmFiZTM3NDQ4NTMyNjRkIiwiaWF0IjoxNzI4MzE5OTc5fQ.Cvwy_sl1jMPbMIYBwMBxpIdPEF7EKRlUUHSsSGrzBp4
+
+{
+  "title": "Testing MIDDLEWARE 15-10",
+  "author": "H. Simpson",
+  "url": "http://example.com/a-",
+  "likes": 12
+}
+
+### Delete blog by giovanni
+DELETE http://localhost:3003/api/blogs/Testing MIDDLEWARE 09-10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdpb3Zhbm5pMiIsImlkIjoiNjcwNDExZDVjZmFiZTM3NDQ4NTMyNjRkIiwiaWF0IjoxNzI4MzE5OTc5fQ.Cvwy_sl1jMPbMIYBwMBxpIdPEF7EKRlUUHSsSGrzBp4
