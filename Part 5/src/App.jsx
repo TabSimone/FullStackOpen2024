@@ -4,6 +4,8 @@ import blogService from './services/blogService';
 import loginService from './services/login';
 import ActionButton from './components/Button';
 import Notification from './components/Notification';
+import CreateBlogForm from './components/CreateBlogForm';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,6 +18,9 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('');
   // State for notification
   const [notificationMessage, setNotificationMessage] = useState('');
+  //State for Blogs details
+  const [expandedBlogs, setExpandedBlogs] = useState({});
+
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -28,6 +33,11 @@ const App = () => {
       setUser(user);
     }
   }, []);
+
+
+  const handleViewBlogDetails = (id) => {
+    console.log('clicked');
+  };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser');
@@ -65,7 +75,7 @@ const App = () => {
 
       showNotification('Blog created successfully!');
       const updatedBlogs = await blogService.getAll();
-      setBlogs(updatedBlogs); 
+      setBlogs(updatedBlogs);
     } catch (error) {
       console.error('Error creating blog:', error.response ? error.response.data : error.message);
       showNotification('Failed to create blog. Please try again.');
@@ -80,6 +90,14 @@ const App = () => {
     setTimeout(() => {
       setNotificationMessage('');
     }, 3000);
+  };
+
+
+  const toggleAuthorVisibility = (blogId) => {
+    setExpandedBlogs((prev) => ({
+      ...prev,
+      [blogId]: !prev[blogId], // Inverte la visibilità solo per il blog cliccato
+    }));
   };
 
   if (user === null) {
@@ -114,48 +132,58 @@ const App = () => {
 
   return (
     <>
-      <div>
+      <div style={{ marginBottom: '20px' }}>
         Welcome, {user.username}!<ActionButton onClick={() => handleLogout()} buttonText="Logout" />
       </div>
 
       {/* Add new blog */}
-      <div>
-        <form onSubmit={writeAttributes}>
-          <div>
-            Title:
-            <input
-              type="text"
-              value={newTitle}
-              onChange={({ target }) => setNewTitle(target.value)}
-            />
-          </div>
-          <div>
-            Author:
-            <input
-              type="text"
-              value={newAuthor}
-              onChange={({ target }) => setNewAuthor(target.value)}
-            />
-          </div>
-          <div>
-            URL:
-            <input
-              type="text"
-              value={newUrl}
-              onChange={({ target }) => setNewUrl(target.value)}
-            />
-          </div>
-          <button type="submit">Create</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="New Blog">
+        <CreateBlogForm
+          onSubmit={writeAttributes}
+          newTitle={newTitle}
+          newAuthor={newAuthor}
+          newUrl={newUrl}
+          setNewTitle={setNewTitle}
+          setNewAuthor={setNewAuthor}
+          setNewUrl={setNewUrl}
+        />
+      </Togglable>
+
 
       {/* Display Blogs */}
+
       <div>
         <h2>blogs</h2>
+
+        {/*
         {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} />
+          <div key={blog.id}>
+            <Blog blog={blog} />
+            <button onClick={() => handleViewBlogDetails(blog.id)}>
+              HI!
+            </button>
+
+          </div>
         ))}
+        */}
+
+
+
+        {blogs.map(blog => (
+          <div key={blog.id}>
+            {blog.title}
+            <br></br>
+            {expandedBlogs[blog.id] && <p>Autore: {blog.author}</p>}
+            <button onClick={() => toggleAuthorVisibility(blog.id)}>
+              {expandedBlogs[blog.id] ? "Hide" : "View          "}
+            </button>
+          </div>
+        ))}
+
+
+
       </div>
+
 
       {notificationMessage && <Notification textToDisplay={notificationMessage} />}
     </>
