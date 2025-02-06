@@ -2,6 +2,9 @@ import axios from 'axios'
 const baseUrl = '/api/blogs'
 
 
+
+
+
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
@@ -28,5 +31,29 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const increaseLikes = async (id, token) => {
+  
+  console.log(`Making PUT request to: ${baseUrl}/${id}`);
 
-export default { getAll, create, update }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+    
+    // Poiché stiamo solo aggiornando i likes, non dovremmo aver bisogno di inviare altri dati
+    const response = await axios.put(
+      `${baseUrl}/${id}`, 
+      { }, // inviamo esplicitamente il nuovo valore dei likes
+      config
+    );
+    
+    console.log('Response:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Errore completo:", error.response || error);
+    throw error;
+  }
+}
+
+export default { getAll, create, update, increaseLikes }

@@ -100,6 +100,14 @@ const App = () => {
     }));
   };
 
+  const increaseLikes = async (blogId) => {
+    console.log("Entered increase likes")
+    console.log(user.token)
+    //console.log(blogId)
+    await blogService.increaseLikes(blogId, user.token);
+    blogService.getAll().then(blogs => setBlogs(blogs));
+  };
+
   if (user === null) {
     return (
       <div>
@@ -173,7 +181,13 @@ const App = () => {
           <div key={blog.id}>
             {blog.title}
             <br></br>
-            {expandedBlogs[blog.id] && <p>Autore: {blog.author}</p>}
+            {expandedBlogs[blog.id] && <div>
+              <p>Author: {blog.author}</p>
+              <p>Likes: {blog.likes}</p>
+              <button onClick={() => increaseLikes(blog.id)}>
+              Aggiungere likes
+            </button>
+            </div>}
             <button onClick={() => toggleAuthorVisibility(blog.id)}>
               {expandedBlogs[blog.id] ? "Hide" : "View          "}
             </button>
