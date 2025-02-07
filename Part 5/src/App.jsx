@@ -108,6 +108,14 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs));
   };
 
+  const deleteBlog = async (blogId) => {
+    console.log(user.token)
+    console.log(blogId)
+    await blogService.deleteBlog(blogId, user.token);
+    console.log("sono passato")
+    blogService.getAll().then(blogs => setBlogs(blogs));
+  };
+
   if (user === null) {
     return (
       <div>
@@ -185,8 +193,14 @@ const App = () => {
               <p>Author: {blog.author}</p>
               <p>Likes: {blog.likes}</p>
               <button onClick={() => increaseLikes(blog.id)}>
-              Aggiungere likes
+              Add like
             </button>
+            {/* Mostra il bottone solo se il blog ha più di 10 likes */}
+        {blog.author == user.username && (
+          <button onClick={() => deleteBlog(blog.id)}>
+            Delete blog
+          </button>
+        )}
             </div>}
             <button onClick={() => toggleAuthorVisibility(blog.id)}>
               {expandedBlogs[blog.id] ? "Hide" : "View          "}

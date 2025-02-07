@@ -43,7 +43,7 @@ const increaseLikes = async (id, token) => {
     // Poiché stiamo solo aggiornando i likes, non dovremmo aver bisogno di inviare altri dati
     const response = await axios.put(
       `${baseUrl}/${id}`, 
-      { }, // inviamo esplicitamente il nuovo valore dei likes
+      { }, 
       config
     );
     
@@ -56,4 +56,30 @@ const increaseLikes = async (id, token) => {
   }
 }
 
-export default { getAll, create, update, increaseLikes }
+
+const deleteBlog = async (id, token) => {
+  
+  console.log(`Making DELETE request to: ${baseUrl}/${id}`);
+
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+    
+    // Poiché stiamo solo aggiornando i likes, non dovremmo aver bisogno di inviare altri dati
+    const response = await axios.delete(
+      `${baseUrl}/${id}`, 
+      { }, 
+      config
+    );
+    
+    console.log('Response:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Errore completo:", error.response || error);
+    throw error;
+  }
+}
+
+export default { getAll, create, update, increaseLikes, deleteBlog }
