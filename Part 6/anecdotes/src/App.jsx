@@ -10,6 +10,11 @@ const App = () => {
       type: 'VOTE',
       payload: id
     })
+
+    console.log('order vote')
+    dispatch({
+      type: 'ORDER_BY_VOTE',
+    })
   }
 
   const newAnecdote = (event) => {

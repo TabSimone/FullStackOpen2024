@@ -32,6 +32,8 @@ const reducer = (state = initialState, action) => {
       );
     case 'NEW_ANECDOTE':
       return [...state, asObject(action.payload)]
+    case 'ORDER_BY_VOTE':
+      return [...state].sort((a, b) => b.votes - a.votes);
     default:
       return state;
   }
