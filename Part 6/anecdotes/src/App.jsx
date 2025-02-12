@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { voteAction, orderByVoteAction, newAnecdoteAction } from './reducers/anecdoteReducer'
+
 
 const App = () => {
   const anecdotes = useSelector(state => state)
@@ -6,15 +8,11 @@ const App = () => {
 
   const vote = (id) => {
     console.log('vote', id)
-    dispatch({
-      type: 'VOTE',
-      payload: id
-    })
+    dispatch(voteAction(id))
 
     console.log('order vote')
-    dispatch({
-      type: 'ORDER_BY_VOTE',
-    })
+    dispatch(orderByVoteAction())
+
   }
 
   const newAnecdote = (event) => {
@@ -22,12 +20,9 @@ const App = () => {
     // Usa direttamente event.target per accedere al form
     const content = event.target.anecdoteText.value;
     console.log('new anecdote', content);
-    
-     dispatch({
-       type: 'NEW_ANECDOTE',
-      payload: content
-     })
-    
+
+    dispatch(newAnecdoteAction(content))
+
     event.target.anecdoteText.value = '';
   }
 
