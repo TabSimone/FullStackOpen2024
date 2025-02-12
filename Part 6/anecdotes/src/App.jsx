@@ -8,7 +8,22 @@ const App = () => {
     console.log('vote', id)
     dispatch({
       type: 'VOTE',
-    payload: id    })
+      payload: id
+    })
+  }
+
+  const newAnecdote = (event) => {
+    event.preventDefault();
+    // Usa direttamente event.target per accedere al form
+    const content = event.target.anecdoteText.value;
+    console.log('new anecdote', content);
+    
+     dispatch({
+       type: 'NEW_ANECDOTE',
+      payload: content
+     })
+    
+    event.target.anecdoteText.value = '';
   }
 
   return (
@@ -26,9 +41,12 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      {/* Importante: aggiungi onSubmit al form invece di onClick al button */}
+      <form onSubmit={newAnecdote}>
+        <div>
+          <input name="anecdoteText" />
+        </div>
+        <button type="submit">create</button>
       </form>
     </div>
   )
