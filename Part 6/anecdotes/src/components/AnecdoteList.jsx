@@ -9,7 +9,18 @@ import { voteAction, orderByVoteAction } from '../reducers/anecdoteReducer';
 const AnecdoteList = () => {
 
   const dispatch = useDispatch();
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => {
+    if (state.filter === 'ALL') {
+      return state.anecdote
+    }
+    if(state.filter === 'SET_FILTER')
+      console.log("Payload attivo:", state.filter);
+    return state.anecdote.filter(anecdote =>
+      anecdote.content.toLowerCase().startsWith(state.filter.toLowerCase())
+    );
+  })
+
+
 
   const vote = (id) => {
     console.log('vote', id)
