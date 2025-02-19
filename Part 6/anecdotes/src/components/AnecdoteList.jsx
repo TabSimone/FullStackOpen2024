@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { voteAction, orderByVoteAction } from '../reducers/anecdoteReducer';
+import { showNotification } from '../reducers/notificationReducer'
 
 
 
@@ -28,6 +29,13 @@ const AnecdoteList = () => {
 
     console.log('order vote')
     dispatch(orderByVoteAction())
+
+    console.log('show notification')
+    dispatch(showNotification(id));
+
+    setTimeout(() => {
+      dispatch(showNotification("")); // Nasconde la notifica dopo 5 sec
+    }, 5000);
 
   }
 
