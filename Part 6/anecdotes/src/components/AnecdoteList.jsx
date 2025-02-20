@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { voteAction, orderByVoteAction } from '../reducers/anecdoteReducer';
+import { voteAction, orderByVoteAction,  upvoteAnecdote} from '../reducers/anecdoteReducer';
 import { showNotification } from '../reducers/notificationReducer'
 
 
@@ -26,6 +26,10 @@ const AnecdoteList = () => {
   const vote = (id) => {
     console.log('vote', id)
     dispatch(voteAction(id))
+
+
+    const anecdote = anecdotes.find(anecdote => anecdote.id === id)
+    dispatch(upvoteAnecdote(anecdote))
 
     console.log('order vote')
     dispatch(orderByVoteAction())
