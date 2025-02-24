@@ -24,6 +24,10 @@ const App = () => {
     return <div>loading data...</div>
   }
 
+  if ( result.isError  ) {
+    return <div>Unable to connect...</div>
+  }
+
   const anecdotes = result.data
 
 
