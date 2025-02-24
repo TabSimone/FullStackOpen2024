@@ -23,4 +23,13 @@ export const createAnecdote = async (newAnecdote) => {
   }
 }
 
+export const increaseUpvote = async (newAnecdote) => {
+}
+
+export const upvoteAnecdote = async (anecdote) => {
+  console.log("Upvote anecdote", anecdote.id)  // Log del corpo della richiesta
+
+  const response = await axios.patch(`${baseUrl}/${anecdote.id}`, { votes: anecdote.votes + 1 });
+  return response.data;
+};
 
