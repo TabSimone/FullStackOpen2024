@@ -1,14 +1,18 @@
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 
+
 // Reducer che gestisce lo stato
 const notificationReducer = (state, action) => {
   switch (action.type) {
     case "UPVOTE":
-      return state + 1;
-    case "NEW_ANECDOTE":
-      return state - 1;
+      console.log("UPVOTE")
+      return { ...state, text: action.text };
+    case "ERROR_HANDLING":
+      console.log("ERROR_HANDLING")
+      return { ...state, text: action.text };
     case "NOTHING":
+      console.log("NOTHING")
       return state;
     default:
       return state;
@@ -19,7 +23,7 @@ const NotificationContext = createContext();
 
 // Provider che fornisce lo stato del contesto
 export const NotificationContextProvider = (props) => {
-  const [notification, notificationDispatch] = useReducer(notificationReducer, 0);
+  const [notification, notificationDispatch] = useReducer(notificationReducer, { text: '' })
 
   return (
     <NotificationContext.Provider value={[notification, notificationDispatch]}>

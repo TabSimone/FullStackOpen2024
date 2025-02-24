@@ -3,12 +3,14 @@ import Notification from './components/Notification'
 import { getAnecdotes, upvoteAnecdote } from './services/requests'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
-
-
+import NotificationContext  from './contexts/NotificationContext'
+import { useContext } from 'react'
 
 const App = () => {
   const queryClient = useQueryClient()
 
+  const [notification, dispatch] = useContext(NotificationContext)
+  
   const result = useQuery({
     queryKey: ['anecdotes'],
     queryFn: getAnecdotes
@@ -36,7 +38,13 @@ const App = () => {
   const handleVote = (anecdote) => {
     console.log('vote', anecdote.id)
 
+    const text = "anecdote " + anecdote.content + " upvoted"
+
+    dispatch({ type: "UPVOTE", text: text });
+
     mutation.mutate(anecdote); 
+
+
   }
 
 
