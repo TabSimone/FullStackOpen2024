@@ -169,47 +169,19 @@ const App = () => {
       {/* Display Blogs */}
 
       <div>
-        <h2>blogs</h2>
-
-        {/*
-        {blogs.map(blog => (
-          <div key={blog.id}>
-            <Blog blog={blog} />
-            <button onClick={() => handleViewBlogDetails(blog.id)}>
-              HI!
-            </button>
-
-          </div>
-        ))}
-        */}
-
-
+        <h2>BLOGS </h2>
 
         {blogs.map(blog => (
-          <div key={blog.id}>
-            {blog.title}
-            <br></br>
-            {expandedBlogs[blog.id] && <div>
-              <p>Author: {blog.author}</p>
-              <p>Likes: {blog.likes}</p>
-              <button onClick={() => increaseLikes(blog.id)}>
-              Add like
-            </button>
-            {/* Mostra il bottone solo se il blog ha più di 10 likes */}
-        {blog.author == user.username && (
-          <button onClick={() => deleteBlog(blog.id)}>
-            Delete blog
-          </button>
-        )}
-            </div>}
-            <button onClick={() => toggleAuthorVisibility(blog.id)}>
-              {expandedBlogs[blog.id] ? "Hide" : "View          "}
-            </button>
-          </div>
+          <Blog
+            key={blog.id}  // Aggiungi una key univoca
+            blog={blog}
+            expandedBlogs={expandedBlogs}
+            toggleAuthorVisibility={toggleAuthorVisibility}
+            increaseLikes={increaseLikes}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         ))}
-
-
-
       </div>
 
 
