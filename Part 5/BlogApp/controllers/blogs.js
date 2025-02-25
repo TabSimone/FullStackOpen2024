@@ -47,31 +47,49 @@ blogsRouter.post('/api/blogs', middleware.tokenExtractor, middleware.userExtract
   }
 });
 
-// DELETE a blog
-blogsRouter.delete('/api/blogs/:title', middleware.tokenExtractor, middleware.userExtractor, async (request, response, next) => {
-  const title = request.params.title;
 
-  // The user is extracted by the tokenExtractor middleware
-  const user = request.user;
-
+//DELETE A BLOG
+blogsRouter.delete('/api/blogs/:id', middleware.tokenExtractor, async (req, res) => {
   try {
-    const blog = await Blog.findOne({ 'title': title, 'username': user.username });
+      const { id } = req.params;
 
-    if (!blog) {
-      return response.status(404).json({ error: 'Blog not found or user does not have permission' });
-    }
+      // Trova il blog nel database
+      const blog = await Blog.findById(id);
+      if (!blog) return res.status(404).json({ error: 'Blog non trovato' });
 
-    const result = await Blog.deleteOne({ _id: blog._id });
+      const result = await Blog.deleteOne({ _id: blog._id });
 
-    // Check if a document was deleted
-    if (result.deletedCount === 0) {
-      return response.status(404).json({ error: 'Blog not found during deletion' });
-    }
-
-    response.status(204).end(); // No content to send back
+      // Restituisce il documento aggiornato come risposta
+      return res.status(201).json(result);
+      
   } catch (error) {
-    next(error); // Pass errors to the error handler
+      res.status(500).json({ error: 'Errore durante l\'aggiornamento' });
   }
 });
+
+// INCREASE likes of a blog
+blogsRouter.put('/api/blogs/:id', middleware.tokenExtractor, async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      // Trova il blog nel database
+      const blog = await Blog.findById(id);
+      if (!blog) return res.status(404).json({ error: 'Blog non trovato' });
+
+      // Incrementa i like di 1
+      blog.likes += 1;
+
+      // Salva il documento aggiornato
+      const updatedBlog = await blog.save();
+
+      // Restituisce il documento aggiornato come risposta
+      res.json(updatedBlog);
+      
+  } catch (error) {
+      res.status(500).json({ error: 'Errore durante l\'aggiornamento' });
+  }
+});
+
+
 
 module.exports = blogsRouter;
