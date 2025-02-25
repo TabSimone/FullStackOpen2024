@@ -13,7 +13,7 @@ const notificationReducer = (state, action) => {
       return { ...state, text: action.text };
     case "NOTHING":
       console.log("NOTHING")
-      return state;
+      return  { ...state, text: "" };
     default:
       return state;
   }
