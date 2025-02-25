@@ -40,6 +40,9 @@ test('renders content', () => {
 
   screen.debug()
 
-  const element = screen.getByText('Blog test title')
-  expect(element).toBeDefined()
+  const title = screen.getByText('Blog test title')
+  expect(title).toBeDefined()
+
+  const likes = screen.queryByText('Likes')
+  expect(likes).toBeNull()
 })
