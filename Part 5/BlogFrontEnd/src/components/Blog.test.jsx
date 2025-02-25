@@ -1,14 +1,45 @@
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 
+
 test('renders content', () => {
-  const blog = {
-    content: 'Component testing is done with react-testing-library',
-    important: true
+  const user = {
+    id : "012",
+    passwordHash: "uidsnviusadnfviuenawrpivnu",
+    name: "etes",
+    username: "username_test"
   }
 
-  render(<Note note={note} />)
+  const blog = {
+    id : "01",
+    title: "Blog test title",
+    author: "Author Author",
+    url: "http://example.com/a-",
+    username: "username_test"
+  }
 
-  const element = screen.getByText('Component testing is done with react-testing-library')
+  const toggleAuthorVisibility = function() {
+    console.log("Hello, world!");
+  };
+  const increaseLikes = function() {
+    console.log("Hello, world!");
+  };
+  const deleteBlog = function() {
+    console.log("Hello, world!");
+  };
+
+  render(<Blog
+    key={blog.id}  // Aggiungi una key univoca
+    blog={blog}
+    expandedBlogs={{}}
+    toggleAuthorVisibility={toggleAuthorVisibility}
+    increaseLikes={increaseLikes}
+    deleteBlog={deleteBlog}
+    user={user}
+  />)
+
+  screen.debug()
+
+  const element = screen.getByText('Blog test title')
   expect(element).toBeDefined()
 })
