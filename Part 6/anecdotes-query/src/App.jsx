@@ -32,7 +32,8 @@ const App = () => {
     return <div>Unable to connect...</div>
   }
 
-  const anecdotes = result.data
+  const anecdotes = result.data || [];
+
 
 
   const handleVote = (anecdote) => {

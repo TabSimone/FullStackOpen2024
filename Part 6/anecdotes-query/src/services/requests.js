@@ -20,6 +20,7 @@ export const createAnecdote = async (newAnecdote) => {
     return response.data
   } catch (error) {
     console.error("Error in POST request:", error.response || error)  // Log dell'errore, se presente
+    throw error
   }
 }
 
