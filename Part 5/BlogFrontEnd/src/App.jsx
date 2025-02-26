@@ -18,9 +18,6 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('');
   // State for notification
   const [notificationMessage, setNotificationMessage] = useState('');
-  //State for Blogs details
-  const [expandedBlogs, setExpandedBlogs] = useState({});
-
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -34,10 +31,6 @@ const App = () => {
     }
   }, []);
 
-
-  const handleViewBlogDetails = (id) => {
-    console.log('clicked');
-  };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser');
@@ -175,8 +168,6 @@ const App = () => {
           <Blog
             key={blog.id}  // Aggiungi una key univoca
             blog={blog}
-            expandedBlogs={expandedBlogs}
-            toggleAuthorVisibility={toggleAuthorVisibility}
             increaseLikes={increaseLikes}
             deleteBlog={deleteBlog}
             user={user}

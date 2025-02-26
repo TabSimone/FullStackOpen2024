@@ -1,25 +1,29 @@
-// Blog.js
-import React from 'react';
+import React, { useState } from 'react';
 
-const Blog = ({ blog, expandedBlogs, toggleAuthorVisibility, increaseLikes, deleteBlog, user }) => {
+const Blog = ({ blog, increaseLikes, deleteBlog, user }) => {
+  const [expanded, setExpanded] = useState(false);
+  
+  const toggleVisibility = () => {
+    setExpanded(!expanded);
+  };
+  
   return (
-    <div key={blog.id}>
+    <div>
       {blog.title}
       <br />
-      {expandedBlogs[blog.id] && (
+      {expanded && (
         <div>
           <p>Author: {blog.author}</p>
           <p>Likes: {blog.likes}</p>
           <button onClick={() => increaseLikes(blog.id)}>Add like</button>
           
-          {/* Mostra il bottone solo se il blog ha più di 10 likes */}
           {blog.author === user.username && (
             <button onClick={() => deleteBlog(blog.id)}>Delete blog</button>
           )}
         </div>
       )}
-      <button onClick={() => toggleAuthorVisibility(blog.id)}>
-        {expandedBlogs[blog.id] ? "Hide" : "View"}
+      <button onClick={toggleVisibility}>
+        {expanded ? "Hide" : "View"}
       </button>
     </div>
   );
