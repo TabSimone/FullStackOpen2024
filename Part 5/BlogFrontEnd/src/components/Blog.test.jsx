@@ -18,7 +18,7 @@ const blog = {
 }
 
 const increaseLikes = function() {
-  console.log("Hello, world!");
+  return 1;
 };
 const deleteBlog = function() {
   console.log("Hello, world!");
@@ -68,4 +68,40 @@ test('clicking the button shows likes and ', async () => {
   expect(likes).toBeDefined()
 
 
+})
+
+test.only('clicking the likes  ', async () => {
+
+  let numberOfClick = 0
+
+  const increaseLikesMock = vi.fn().mockImplementation(() => {
+    numberOfClick++;
+    return numberOfClick; // Restituisce il nuovo numero di click
+  });
+
+  render(<Blog
+    key={blog.id}  // Aggiungi una key univoca
+    blog={blog}
+    increaseLikes={increaseLikesMock}
+    deleteBlog={deleteBlog}
+    user={user}
+  />)
+
+  screen.debug()
+
+  const userReal = userEvent.setup()
+  const button = screen.getByText('View')
+  await userReal.click(button)
+
+  const buttonLike = screen.getByText('Add like')
+  await userReal.click(buttonLike)
+  await userReal.click(buttonLike)
+
+  // Verifica che increaseLikes sia stato chiamato due volte
+  expect(increaseLikesMock).toHaveBeenCalledTimes(2);
+
+  // Verifica che il numero di click sia corretto
+  expect(numberOfClick).toBe(2);
+
+  
 })
