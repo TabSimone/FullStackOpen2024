@@ -17,9 +17,6 @@ const blog = {
   username: "username_test"
 }
 
-const toggleAuthorVisibility = function() {
-  console.log("Hello, world!");
-};
 const increaseLikes = function() {
   console.log("Hello, world!");
 };
@@ -33,7 +30,6 @@ test('renders content', () => {
     key={blog.id}  // Aggiungi una key univoca
     blog={blog}
     expandedBlogs={{}}
-    toggleAuthorVisibility={toggleAuthorVisibility}
     increaseLikes={increaseLikes}
     deleteBlog={deleteBlog}
     user={user}
@@ -48,24 +44,13 @@ test('renders content', () => {
   expect(likes).toBeNull()
 })
 
-test.only('clicking the button shows likes and ', async () => {
-
-  const [expandedBlogs, setExpandedBlogs] = useState({});
-
-    const toggleAuthorVisibility = (id) => {
-      setExpandedBlogs((prevExpandedBlogs) => ({
-        ...prevExpandedBlogs,
-        [id]: !prevExpandedBlogs[id],
-      }));
-    };
+test('clicking the button shows likes and ', async () => {
 
   const mockHandler = vi.fn()
 
   render(<Blog
     key={blog.id}  // Aggiungi una key univoca
     blog={blog}
-    expandedBlogs={blog}
-    toggleAuthorVisibility={toggleAuthorVisibility}
     increaseLikes={increaseLikes}
     deleteBlog={deleteBlog}
     user={user}
@@ -79,7 +64,7 @@ test.only('clicking the button shows likes and ', async () => {
 
   screen.debug()
 
-  const likes = screen.getByText('Likes')
+  const likes = screen.getByText('Likes:')
   expect(likes).toBeDefined()
 
 
