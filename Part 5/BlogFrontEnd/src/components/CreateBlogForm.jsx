@@ -1,44 +1,70 @@
-const CreateBlogForm = ({ newTitle, newAuthor, newUrl, setNewTitle, setNewAuthor, setNewUrl, toggleVisibility }) => {
+import React, { useState } from 'react';
+import Blog from './Blog'
+
+const CreateBlogForm = ({ toggleVisibility, createBlog }) => {
+  // Stati per i valori dell'input
+  const [newTitle, setNewTitle] = useState('');
+  const [newAuthor, setNewAuthor] = useState('');
+  const [newUrl, setNewUrl] = useState('');
+
+  // Gestore del submit
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("sono entrato in handle Submit")
-    toggleVisibility()
+    console.log("Nuovo titolo", newTitle);
+    console.log("Nuovo autore", newAuthor);
+    console.log("Nuovo url", newUrl);
+
+    const newBlog = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    };
+
+    // Nascondi il form dopo il submit
+    toggleVisibility();
+
+    createBlog(newBlog);
+
+    setNewAuthor('')
+    setNewTitle('')
+    setNewUrl('')
   };
+
   return (
-    <div>
     <form onSubmit={handleSubmit}>
       <div>
-        Title:
+        <label htmlFor="title">Title:</label>
         <input
+          id="title"
+          name="title"
           type="text"
           value={newTitle}
           onChange={({ target }) => setNewTitle(target.value)}
-
         />
       </div>
       <div>
-        Author:
+        <label htmlFor="author">Author:</label>
         <input
+          id="author"
+          name="author"
           type="text"
           value={newAuthor}
           onChange={({ target }) => setNewAuthor(target.value)}
-
         />
       </div>
       <div>
-        URL:
+        <label htmlFor="url">URL:</label>
         <input
+          id="url"
+          name="url"
           type="text"
           value={newUrl}
           onChange={({ target }) => setNewUrl(target.value)}
-
         />
       </div>
       <button type="submit">Create</button>
     </form>
-  </div>
-  )
-}
+  );
+};
 
 export default CreateBlogForm;
-

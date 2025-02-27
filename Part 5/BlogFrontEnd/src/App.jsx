@@ -52,10 +52,7 @@ const App = () => {
     }
   };
 
-  const writeAttributes = async (event) => {
-    event.preventDefault();
-
-    const newBlog = { title: newTitle, author: newAuthor, url: newUrl };
+  const writeAttributes = async (newBlog) => {
 
     try {
       console.log(user.token)
@@ -148,13 +145,7 @@ const App = () => {
       {/* Add new blog */}
       <Togglable buttonLabel="New Blog">
         <CreateBlogForm
-          onSubmit={writeAttributes}
-          newTitle={newTitle}
-          newAuthor={newAuthor}
-          newUrl={newUrl}
-          setNewTitle={setNewTitle}
-          setNewAuthor={setNewAuthor}
-          setNewUrl={setNewUrl}
+          createBlog={writeAttributes}
         />
       </Togglable>
 

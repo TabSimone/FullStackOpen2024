@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
+import CreateBlogForm from './CreateBlogForm'
 import userEvent from '@testing-library/user-event'
 
 const user = {
@@ -70,7 +71,7 @@ test('clicking the button shows likes and ', async () => {
 
 })
 
-test.only('clicking the likes  ', async () => {
+test('clicking the likes  ', async () => {
 
   let numberOfClick = 0
 
@@ -104,4 +105,31 @@ test.only('clicking the likes  ', async () => {
   expect(numberOfClick).toBe(2);
 
   
+})
+
+
+
+test.only('<CreateBlogForm /> updates parent state and calls onSubmit', async () => {
+  const createBlog = vi.fn()
+  const userReal = userEvent.setup()
+
+
+  render(<CreateBlogForm toggleVisibility={createBlog} />)
+
+  const sendButton = screen.getByText('Create')
+
+  const inputTitle = screen.getByLabelText("Title:");
+  const inputAuthor = screen.getByLabelText("Author:");
+  const inputUrl = screen.getByLabelText("URL:");
+
+
+
+  await userReal.type(inputTitle, 'testing a title...')
+  await userReal.type(inputAuthor, 'testing a authro...')
+  await userReal.type(inputUrl, 'testing a url...')
+  await userReal.click(sendButton)
+
+
+  screen.debug()
+
 })
