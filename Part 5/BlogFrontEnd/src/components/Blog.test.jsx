@@ -108,28 +108,32 @@ test('clicking the likes  ', async () => {
 })
 
 
-
 test.only('<CreateBlogForm /> updates parent state and calls onSubmit', async () => {
-  const createBlog = vi.fn()
-  const userReal = userEvent.setup()
+  const createBlog = vi.fn();
+  const toggleVisibility = vi.fn();
+  const userReal = userEvent.setup();
 
+  render(<CreateBlogForm toggleVisibility={toggleVisibility} createBlog={createBlog} />);
 
-  render(<CreateBlogForm toggleVisibility={createBlog} />)
-
-  const sendButton = screen.getByText('Create')
-
+  const sendButton = screen.getByText('Create');
   const inputTitle = screen.getByLabelText("Title:");
   const inputAuthor = screen.getByLabelText("Author:");
   const inputUrl = screen.getByLabelText("URL:");
 
+  // Digita i valori negli input
+  await userReal.type(inputTitle, 'testing a title...');
+  await userReal.type(inputAuthor, 'testing a author...');
+  await userReal.type(inputUrl, 'testing a url...');
+  
+  // Clicca sul pulsante per inviare il form
+  await userReal.click(sendButton);
 
+  // Verifica che la funzione createBlog sia stata chiamata con i dati corretti
+  expect(createBlog).toHaveBeenCalledWith({
+    title: 'testing a title...',
+    author: 'testing a author...',
+    url: 'testing a url...',
+  });
 
-  await userReal.type(inputTitle, 'testing a title...')
-  await userReal.type(inputAuthor, 'testing a authro...')
-  await userReal.type(inputUrl, 'testing a url...')
-  await userReal.click(sendButton)
-
-
-  screen.debug()
-
-})
+  screen.debug(); // Aggiungi questo per visualizzare l'output del DOM
+});
