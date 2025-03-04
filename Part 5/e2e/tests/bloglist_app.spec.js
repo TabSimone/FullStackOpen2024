@@ -33,12 +33,12 @@ describe('Blog app', () => {
       await expect(page.getByText('Log in to application')).toBeVisible()
   
       // Effettua il login con l'utente creato
-      //await page.fill('input[name="username"]', 'mluukkai')
-      //await page.fill('input[name="password"]', 'salainen')
-      //await page.click('button[type="submit"]')
+      await page.fill('input[name="Username"]', 'mluukkai')
+      await page.fill('input[name="Password"]', 'salainen')
+      await page.click('button[type="submit"]')
   
       // Verifica che il login sia andato a buon fine, ad esempio controllando la presenza del nome dell'utente
-      //await expect(page.getByText('Welcome')).toBeVisible()
+      await expect(page.getByText('Welcome')).toBeVisible()
     })
 
 })
