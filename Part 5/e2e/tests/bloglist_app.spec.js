@@ -1,21 +1,17 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { makeNewUserAndLogin } = require('./helper')
+const { makeNewUserAndLogin, makeANewBlog } = require('./helper')
 
 
-describe('When logged in', () => {
+describe('Can like a blog?', () => {
   beforeEach(async ({ page, request }) => {
     await makeNewUserAndLogin(page, request)
+    await makeANewBlog(page)
   })
 
   test('a new blog can be created', async ({ page }) => {
-    await expect(page.getByText('Welcome')).toBeVisible()
-    await page.click('button:text("New Blog")');
-    await page.fill('input[name="title"]', 'New Blog Title')
-    await page.fill('input[name="author"]', 'text')
-    await page.fill('input[name="url"]', 'text')
-    await page.click('button[type="submit"]')
+    await expect(page.getByText('New awevawevawevawe')).toBeVisible()
 
-    await expect(page.getByText('New Blog Title')).toBeVisible()
+
   })
 })
 
@@ -77,3 +73,21 @@ describe('Blog app', () => {
 })
 */
 
+/*
+describe('When logged in', () => {
+  beforeEach(async ({ page, request }) => {
+    await makeNewUserAndLogin(page, request)
+  })
+
+  test('a new blog can be created', async ({ page }) => {
+    await expect(page.getByText('Welcome')).toBeVisible()
+    await page.click('button:text("New Blog")');
+    await page.fill('input[name="title"]', 'New Blog Title')
+    await page.fill('input[name="author"]', 'text')
+    await page.fill('input[name="url"]', 'text')
+    await page.click('button[type="submit"]')
+
+    await expect(page.getByText('New Blog Title')).toBeVisible()
+  })
+})
+  */

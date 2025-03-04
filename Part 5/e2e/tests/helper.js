@@ -22,8 +22,21 @@ const makeNewUserAndLogin = async (page, request)  => {
   // Verifica che il login sia andato a buon fine, ad esempio controllando la presenza del nome dell'utente
   await expect(page.getByText('Welcome')).toBeVisible()
 
+}
 
+
+const makeANewBlog = async (page)  => {
+  await expect(page.getByText('Welcome')).toBeVisible()
+  await page.click('button:text("New Blog")');
+  await page.fill('input[name="title"]', 'New Blog Title')
+  await page.fill('input[name="author"]', 'text')
+  await page.fill('input[name="url"]', 'text')
+  await page.click('button[type="submit"]')
+
+  await expect(page.getByText('New Blog Title')).toBeVisible()
 
 }
 
-export { makeNewUserAndLogin }
+
+
+export { makeNewUserAndLogin, makeANewBlog }
