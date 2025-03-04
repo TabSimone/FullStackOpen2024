@@ -2,13 +2,13 @@ const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { makeNewUserAndLogin, makeANewBlog } = require('./helper')
 
 
-describe('Can like a blog?', () => {
+describe('Can I delete a blog?', () => {
   beforeEach(async ({ page, request }) => {
     await makeNewUserAndLogin(page, request)
     await makeANewBlog(page)
   })
 
-  test('Can like a blog?', async ({ page }) => {
+  test('Can I delete a blog?', async ({ page }) => {
     await page.click('button:text("View")');
     await expect(page.getByText('0')).toBeVisible()
     await page.click('button:text("Add like")');
@@ -92,3 +92,19 @@ describe('When logged in', () => {
   })
 })
   */
+
+/*
+describe('Can like a blog?', () => {
+  beforeEach(async ({ page, request }) => {
+    await makeNewUserAndLogin(page, request)
+    await makeANewBlog(page)
+  })
+
+  test('Can like a blog?', async ({ page }) => {
+    await page.click('button:text("View")');
+    await expect(page.getByText('0')).toBeVisible()
+    await page.click('button:text("Add like")');
+    await expect(page.getByText('1')).toBeVisible()
+  })
+})
+*/
