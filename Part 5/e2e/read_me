@@ -1,1 +1,8 @@
 npm test -- --project chromium
+
+
+npx playwright test ./tests/bloglist_app.spec.js -- --project chromium
+
+
+npx playwright test ./tests/bloglist_app.spec.js --project=chromium
+

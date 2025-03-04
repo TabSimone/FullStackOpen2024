@@ -1,4 +1,17 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { makeNewUserAndLogin } = require('./helper')
+
+
+describe('When logged in', () => {
+  beforeEach(async ({ page, request }) => {
+    await makeNewUserAndLogin(page, request)
+  })
+
+  test('a new blog can be created', async ({ page }) => {
+    await expect(page.getByText('Welcome')).toBeVisible()
+  })
+})
+
 
 /*
 describe('Blog app', () => {
@@ -13,7 +26,7 @@ describe('Blog app', () => {
 })
 */
 
-
+/*
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
       
@@ -55,3 +68,5 @@ describe('Blog app', () => {
     })
 
 })
+*/
+
