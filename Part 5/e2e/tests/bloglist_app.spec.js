@@ -8,10 +8,11 @@ describe('Can like a blog?', () => {
     await makeANewBlog(page)
   })
 
-  test('a new blog can be created', async ({ page }) => {
-    await expect(page.getByText('New awevawevawevawe')).toBeVisible()
-
-
+  test('Can like a blog?', async ({ page }) => {
+    await page.click('button:text("View")');
+    await expect(page.getByText('0')).toBeVisible()
+    await page.click('button:text("Add like")');
+    await expect(page.getByText('1')).toBeVisible()
   })
 })
 
