@@ -41,4 +41,17 @@ describe('Blog app', () => {
       await expect(page.getByText('Welcome')).toBeVisible()
     })
 
+    test('User login is not succesfull', async ({ page }) => {
+      // Verifica se la pagina di login è visibile (presumendo che l'utente debba loggarsi dopo la creazione)
+      await expect(page.getByText('Log in to application')).toBeVisible()
+  
+      // Effettua il login con l'utente creato
+      await page.fill('input[name="Username"]', 'nbhsgdgh')
+      await page.fill('input[name="Password"]', 'saladgndgndgninen')
+      await page.click('button[type="submit"]')
+  
+      // Verifica che il login sia andato a buon fine, ad esempio controllando la presenza del nome dell'utente
+      await expect(page.getByText('Log in to application')).toBeVisible()
+    })
+
 })
