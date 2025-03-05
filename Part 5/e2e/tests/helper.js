@@ -24,15 +24,15 @@ const makeNewUserAndLogin = async (page, request, name, username)  => {
 }
 
 
-const makeANewBlog = async (page)  => {
+const makeANewBlog = async (page, title, author, url)  => {
   await expect(page.getByText('Welcome')).toBeVisible()
   await page.click('button:text("New Blog")');
-  await page.fill('input[name="title"]', 'New Blog Title')
-  await page.fill('input[name="author"]', 'pippo')
-  await page.fill('input[name="url"]', 'text')
+  await page.fill('input[name="title"]', title)
+  await page.fill('input[name="author"]', author)
+  await page.fill('input[name="url"]', url)
   await page.click('button[type="submit"]')
 
-  await expect(page.getByText('New Blog Title')).toBeVisible()
+  await expect(page.getByText(title)).toBeVisible()
 
 }
 

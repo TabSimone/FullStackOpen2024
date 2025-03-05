@@ -91,12 +91,23 @@ const App = () => {
   };
 
   const increaseLikes = async (blogId) => {
-    console.log("Entered increase likes")
-    console.log(user.token)
+    console.log("Entered increase likes");
+    console.log(user.token);
     //console.log(blogId)
+  
+    // Aumenta i "likes"
     await blogService.increaseLikes(blogId, user.token);
-    blogService.getAll().then(blogs => setBlogs(blogs));
+  
+    // Ottieni tutti i blog e ordina per "likes"
+    blogService.getAll().then(blogs => {
+      // Ordina i blog in base ai "likes" in ordine decrescente (dal più alto al più basso)
+      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+      
+      // Imposta lo stato con i blog ordinati
+      setBlogs(sortedBlogs);
+    });
   };
+  
 
   const deleteBlog = async (blogId) => {
     console.log(user.token)

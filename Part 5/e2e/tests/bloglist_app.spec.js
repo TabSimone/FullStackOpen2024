@@ -2,23 +2,37 @@ const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { makeNewUserAndLogin, makeANewBlog } = require('./helper')
 
 
-describe('Can I see a delete?', () => {
+describe('Are blog in order?', () => {
   beforeEach(async ({ page, request }) => {
     await request.post('http://localhost:3003/api/testing/reset')
     await makeNewUserAndLogin(page, request, 'pippo', 'pippo')
-    await makeANewBlog(page)
+    await makeANewBlog(page, "Blog 2", "pluto", "url")
+    await makeANewBlog(page, "Blog 1", "pluto", "url")
+    await makeANewBlog(page, "Blog 4", "pluto", "url")
+    await makeANewBlog(page, "Blog 3", "pluto", "url")
   })
 
-  test('Can I see a delete?', async ({ page, request }) => {
-    await page.click('button:text("View")');
-    await expect(page.getByText('New Blog Title')).toBeVisible()
-    await expect(page.getByText('Author: pippo')).toBeVisible()
-    await expect(page.getByText('Delete blog')).toBeVisible()
-    await page.click('button:text("Logout")');
-    await makeNewUserAndLogin(page, request, 'antonio', 'antonio')
-    await expect(page.getByText('Welcome')).toBeVisible()
-    await page.click('button:text("View")');
-    await expect(page.getByText('Delete blog')).not.toBeVisible()
+  test('Are blog in order?', async ({ page, request }) => {
+    const buttons = page.locator("text=View")  
+
+    buttons.nth(3).click()  
+
+    await page.click('button:text("Add like")');
+    await page.click('button:text("Add like")');
+    await page.click('button:text("Add like")');
+    await page.click('button:text("Add like")');
+    await page.click('button:text("Add like")');
+
+    const text1 = page.locator('text=Blog 3');
+    const text2 = page.locator('text=Blog 2');
+
+    const position1 = await text1.evaluate(el => el.getBoundingClientRect().top);
+    const position2 = await text2.evaluate(el => el.getBoundingClientRect().top);
+    
+    expect(position1).toBeLessThan(position2);  
+
+
+
   })
 })
 
@@ -129,6 +143,28 @@ describe('Can I delete a blog?', () => {
     await expect(page.getByText('Author: mluukkai')).toBeVisible()
     await page.click('button:text("Delete blog")');
     await expect(page.getByText('New Blog Title')).not.toBeVisible();
+  })
+})
+*/
+
+/*
+describe('Can I see a delete?', () => {
+  beforeEach(async ({ page, request }) => {
+    await request.post('http://localhost:3003/api/testing/reset')
+    await makeNewUserAndLogin(page, request, 'pippo', 'pippo')
+    await makeANewBlog(page)
+  })
+
+  test('Can I see a delete?', async ({ page, request }) => {
+    await page.click('button:text("View")');
+    await expect(page.getByText('New Blog Title')).toBeVisible()
+    await expect(page.getByText('Author: pippo')).toBeVisible()
+    await expect(page.getByText('Delete blog')).toBeVisible()
+    await page.click('button:text("Logout")');
+    await makeNewUserAndLogin(page, request, 'antonio', 'antonio')
+    await expect(page.getByText('Welcome')).toBeVisible()
+    await page.click('button:text("View")');
+    await expect(page.getByText('Delete blog')).not.toBeVisible()
   })
 })
 */
