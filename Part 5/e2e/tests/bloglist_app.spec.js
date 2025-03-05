@@ -11,8 +11,10 @@ describe('Can I delete a blog?', () => {
   test('Can I delete a blog?', async ({ page }) => {
     await page.click('button:text("View")');
     await expect(page.getByText('0')).toBeVisible()
-    await page.click('button:text("Add like")');
-    await expect(page.getByText('1')).toBeVisible()
+    await expect(page.getByText('New Blog Title')).toBeVisible()
+    await expect(page.getByText('Author: mluukkai')).toBeVisible()
+    await page.click('button:text("Delete blog")');
+    await expect(page.getByText('New Blog Title')).not.toBeVisible();
   })
 })
 

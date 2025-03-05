@@ -29,7 +29,7 @@ const makeANewBlog = async (page)  => {
   await expect(page.getByText('Welcome')).toBeVisible()
   await page.click('button:text("New Blog")');
   await page.fill('input[name="title"]', 'New Blog Title')
-  await page.fill('input[name="author"]', 'text')
+  await page.fill('input[name="author"]', 'mluukkai')
   await page.fill('input[name="url"]', 'text')
   await page.click('button[type="submit"]')
 
