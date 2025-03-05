@@ -2,19 +2,23 @@ const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { makeNewUserAndLogin, makeANewBlog } = require('./helper')
 
 
-describe('Can I delete a blog?', () => {
+describe('Can I see a delete?', () => {
   beforeEach(async ({ page, request }) => {
-    await makeNewUserAndLogin(page, request)
+    await request.post('http://localhost:3003/api/testing/reset')
+    await makeNewUserAndLogin(page, request, 'pippo', 'pippo')
     await makeANewBlog(page)
   })
 
-  test('Can I delete a blog?', async ({ page }) => {
+  test('Can I see a delete?', async ({ page, request }) => {
     await page.click('button:text("View")');
-    await expect(page.getByText('0')).toBeVisible()
     await expect(page.getByText('New Blog Title')).toBeVisible()
-    await expect(page.getByText('Author: mluukkai')).toBeVisible()
-    await page.click('button:text("Delete blog")');
-    await expect(page.getByText('New Blog Title')).not.toBeVisible();
+    await expect(page.getByText('Author: pippo')).toBeVisible()
+    await expect(page.getByText('Delete blog')).toBeVisible()
+    await page.click('button:text("Logout")');
+    await makeNewUserAndLogin(page, request, 'antonio', 'antonio')
+    await expect(page.getByText('Welcome')).toBeVisible()
+    await page.click('button:text("View")');
+    await expect(page.getByText('Delete blog')).not.toBeVisible()
   })
 })
 
@@ -107,6 +111,24 @@ describe('Can like a blog?', () => {
     await expect(page.getByText('0')).toBeVisible()
     await page.click('button:text("Add like")');
     await expect(page.getByText('1')).toBeVisible()
+  })
+})
+*/
+
+/*
+describe('Can I delete a blog?', () => {
+  beforeEach(async ({ page, request }) => {
+    await makeNewUserAndLogin(page, request)
+    await makeANewBlog(page)
+  })
+
+  test('Can I delete a blog?', async ({ page }) => {
+    await page.click('button:text("View")');
+    await expect(page.getByText('0')).toBeVisible()
+    await expect(page.getByText('New Blog Title')).toBeVisible()
+    await expect(page.getByText('Author: mluukkai')).toBeVisible()
+    await page.click('button:text("Delete blog")');
+    await expect(page.getByText('New Blog Title')).not.toBeVisible();
   })
 })
 */
