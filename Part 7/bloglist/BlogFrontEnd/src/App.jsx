@@ -7,14 +7,15 @@ import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
 import Togglable from './components/Togglable';
 import useUser from './hooks/useUser';
+import LoginForm from './components/LoginForm';
+import Login from './services/login';
 
 
 const App = () => {
   
   const { user, handleLogin, handleLogout } = useUser();
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
   
   // State for notification
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -86,28 +87,7 @@ const App = () => {
     return (
       <div>
         {notificationMessage && <Notification textToDisplay={notificationMessage} />}
-        <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
+        <LoginForm handleLogin={handleLogin} />
       </div>
     );
   }
