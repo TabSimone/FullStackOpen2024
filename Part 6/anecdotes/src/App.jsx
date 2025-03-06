@@ -21,9 +21,6 @@ const App = () => {
       <AnecdoteList />
       <Filter />
       <AnecdoteForm />
-
-
-      
     </div>
   )
 }

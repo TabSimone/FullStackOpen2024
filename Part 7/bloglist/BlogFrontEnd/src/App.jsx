@@ -6,16 +6,16 @@ import ActionButton from './components/Button';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
 import Togglable from './components/Togglable';
+import useUser from './hooks/useUser';
+
 
 const App = () => {
+  
+  const { user, handleLogin, handleLogout } = useUser();
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
-  // State for creating a new blog
-  const [newTitle, setNewTitle] = useState('');
-  const [newAuthor, setNewAuthor] = useState('');
-  const [newUrl, setNewUrl] = useState('');
+  
   // State for notification
   const [notificationMessage, setNotificationMessage] = useState('');
 
@@ -23,34 +23,7 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs));
   }, []);
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser');
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-    }
-  }, []);
 
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser');
-    setUser(null); // Clear user state
-  };
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    console.log('logging in with', username, password);
-
-    try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem('loggedUser', JSON.stringify(user));
-      setUser(user);
-      console.log('Correct credential');
-    } catch (exception) {
-      showNotification('Incorrect credential');
-      console.log('Incorrect credential');
-    }
-  };
 
   const writeAttributes = async (newBlog) => {
 
@@ -80,14 +53,6 @@ const App = () => {
     setTimeout(() => {
       setNotificationMessage('');
     }, 3000);
-  };
-
-
-  const toggleAuthorVisibility = (blogId) => {
-    setExpandedBlogs((prev) => ({
-      ...prev,
-      [blogId]: !prev[blogId], // Inverte la visibilità solo per il blog cliccato
-    }));
   };
 
   const increaseLikes = async (blogId) => {
@@ -160,12 +125,8 @@ const App = () => {
         />
       </Togglable>
 
-
-      {/* Display Blogs */}
-
       <div>
         <h2>BLOGS </h2>
-
         {blogs.map(blog => (
           <Blog
             key={blog.id}  // Aggiungi una key univoca
