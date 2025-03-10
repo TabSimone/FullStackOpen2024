@@ -10,16 +10,16 @@ import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 const useBlog = (user) => {
   const dispatch = useDispatch();
 
+  const [blogs, setBlogs] = useState([]); // Stato per gestire i blog
+
   const writeAttributes = async (newBlog) => {
 
     try {
+      console.log('sono entrato')
       console.log(user.token)
+      console.log(' ho scritto user token')
       await blogService.create(newBlog, user.token);
       console.log('Entered writeAttributes!');
-
-      setNewTitle('');
-      setNewAuthor('');
-      setNewUrl('');
 
       dispatch(showNotificationWithTimeout({ message: 'Blog created successfully', time: 2 }));
       const updatedBlogs = await blogService.getAll();
@@ -59,7 +59,7 @@ const useBlog = (user) => {
 
 
   return {
-    writeAttributes, increaseLikes, deleteBlog
+    blogs, writeAttributes, increaseLikes, deleteBlog, setBlogs
   }
 }
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogService';
-import loginService from './services/login';
 import ActionButton from './components/Button';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
@@ -16,34 +15,17 @@ import store from './store'; // Il tuo store Redux
 const App = () => {
 
   const { user, handleLogin, handleLogout } = useUser();
-  
-  const [blogs, setBlogs] = useState([]);
+  const { blogs, writeAttributes, increaseLikes, deleteBlog, setBlogs } = useBlog(user);
 
-
-  // State for notification
-  const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs));
-  }, []);
+    const loadBlogs = async () => {
+      const initialBlogs = await blogService.getAll();
+      setBlogs(initialBlogs); // Carica i blog iniziali nel custom hook
+    };
 
-
-
-
-
-  // New function to handle notifications
-  const showNotification = (message) => {
-    setNotificationMessage(message);
-
-    // Automatically hide the notification after 3 seconds
-    setTimeout(() => {
-      setNotificationMessage('');
-    }, 3000);
-  };
-
-
-  const { writeAttributes, increaseLikes, deleteBlog } = useBlog(showNotification);
-
+    loadBlogs();
+  }, [setBlogs]);
 
 
   if (user === null) {
@@ -66,7 +48,7 @@ const App = () => {
       {/* Add new blog */}
       <Togglable buttonLabel="New Blog">
         <CreateBlogForm
-          createBlog={writeAttributes} user = {user}
+              createBlog={writeAttributes} 
         />
       </Togglable>
 

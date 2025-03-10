@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Blog from './Blog'
 
-const CreateBlogForm = ({ createBlog}) => {
+const CreateBlogForm = ({ createBlog, user}) => {
   // Stati per i valori dell'input
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
@@ -21,7 +21,7 @@ const CreateBlogForm = ({ createBlog}) => {
     };
 
 
-    createBlog(newBlog);
+    createBlog(newBlog, user);
 
     setNewAuthor('')
     setNewTitle('')
