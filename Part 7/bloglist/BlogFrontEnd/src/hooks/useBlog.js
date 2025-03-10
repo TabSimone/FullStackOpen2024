@@ -1,7 +1,6 @@
 import blogService from '../services/blogService';
 import { useState, useEffect } from 'react';
 import loginService from '../services/login';
-import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
@@ -9,6 +8,7 @@ import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
 
 const useBlog = (user) => {
+  const dispatch = useDispatch();
 
   const writeAttributes = async (newBlog) => {
 
@@ -21,12 +21,12 @@ const useBlog = (user) => {
       setNewAuthor('');
       setNewUrl('');
 
-      showNotification('Blog created successfully!');
+      dispatch(showNotificationWithTimeout({ message: 'Blog created successfully', time: 2 }));
       const updatedBlogs = await blogService.getAll();
       setBlogs(updatedBlogs);
     } catch (error) {
       console.error('Error creating blog:', error.response ? error.response.data : error.message);
-      showNotification('Failed to create blog. Please try again.');
+      dispatch(showNotificationWithTimeout({ message: 'Failed to create blog. Please try again', time: 2 }));
     }
   };
 
