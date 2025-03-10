@@ -1,9 +1,14 @@
 import loginService from '../services/login';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { showNotificationWithTimeout } from '../reducers/notificationReducer'
+
+
 
 
 
 const useUser = () => {
+  const dispatch = useDispatch();
 
   const [user, setUser] = useState(null);
 
@@ -21,8 +26,9 @@ const useUser = () => {
   };
 
   const handleLogin = async (event, username, password) => {
-    console.log("sono entrato?")
     event.preventDefault();
+    console.log('funziono?')
+
     console.log('logging in with', username, password);
 
     try {
@@ -31,7 +37,7 @@ const useUser = () => {
       setUser(user);
       console.log('Correct credential');
     } catch (exception) {
-      showNotification('Incorrect credential');
+      dispatch(showNotificationWithTimeout({ message: 'Incorrect credential', time: 2 }));
       console.log('Incorrect credential');
     }
   };

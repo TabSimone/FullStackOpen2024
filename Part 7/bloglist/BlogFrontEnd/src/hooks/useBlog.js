@@ -1,11 +1,14 @@
 import blogService from '../services/blogService';
 import { useState, useEffect } from 'react';
+import loginService from '../services/login';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { showNotificationWithTimeout } from '../reducers/notificationReducer'
 
 
 
 
-
-const useBlog = (showNotification, user) => {
+const useBlog = (user) => {
 
   const writeAttributes = async (newBlog) => {
 

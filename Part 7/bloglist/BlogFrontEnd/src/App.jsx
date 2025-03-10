@@ -9,6 +9,8 @@ import Togglable from './components/Togglable';
 import useUser from './hooks/useUser';
 import useBlog from './hooks/useBlog';
 import LoginForm from './components/LoginForm';
+import { Provider } from 'react-redux';
+import store from './store'; // Il tuo store Redux
 
 
 const App = () => {
@@ -47,7 +49,9 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        {notificationMessage && <Notification textToDisplay={notificationMessage} />}
+        <Provider store={store}>
+          <Notification />
+        </Provider>
         <LoginForm handleLogin={handleLogin} />
       </div>
     );
@@ -80,8 +84,13 @@ const App = () => {
       </div>
 
 
-      {notificationMessage && <Notification textToDisplay={notificationMessage} />}
+      <Provider store={store}>
+          <Notification />
+        </Provider>
+
     </>
+
+
   );
 };
 

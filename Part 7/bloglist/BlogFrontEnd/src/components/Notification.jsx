@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'
 
-const Notification = ({ textToDisplay }) => {
+const Notification = () => {
+
+  const textToDisplay = useSelector(state => state.notification)
+
+  if (!textToDisplay) {
+    return null; // Se notification è vuota, non renderizza nulla
+  }
 
   // Style for the notification
   const notificationStyle = {
