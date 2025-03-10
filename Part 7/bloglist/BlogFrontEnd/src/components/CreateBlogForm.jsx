@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Blog from './Blog'
 
-const CreateBlogForm = ({ }) => {
+const CreateBlogForm = ({ createBlog}) => {
   // Stati per i valori dell'input
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
@@ -20,8 +20,6 @@ const CreateBlogForm = ({ }) => {
       url: newUrl
     };
 
-    // Nascondi il form dopo il submit
-    toggleVisibility();
 
     createBlog(newBlog);
 

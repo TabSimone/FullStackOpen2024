@@ -20,7 +20,8 @@ const useUser = () => {
     setUser(null); // Clear user state
   };
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (event, username, password) => {
+    console.log("sono entrato?")
     event.preventDefault();
     console.log('logging in with', username, password);
 
