@@ -10,22 +10,25 @@ import useBlog from './hooks/useBlog';
 import LoginForm from './components/LoginForm';
 import { Provider } from 'react-redux';
 import store from './store'; // Il tuo store Redux
+import { initializeblogs} from './reducers/blogReducer';
+import { useSelector, useDispatch } from 'react-redux'
 
 
 const App = () => {
 
-  const { user, handleLogin, handleLogout } = useUser();
-  const { blogs, writeAttributes, increaseLikes, deleteBlog, setBlogs } = useBlog(user);
+  const dispatch = useDispatch();
 
+  const blogs = useSelector(state => state.blogs)
 
+  // Inizializza i blog quando il componente viene montato
   useEffect(() => {
-    const loadBlogs = async () => {
-      const initialBlogs = await blogService.getAll();
-      setBlogs(initialBlogs); // Carica i blog iniziali nel custom hook
-    };
+    dispatch(initializeblogs())
+  }, [dispatch])
 
-    loadBlogs();
-  }, [setBlogs]);
+
+  const { user, handleLogin, handleLogout } = useUser();
+  const { writeAttributes, increaseLikes, deleteBlog, setBlogs } = useBlog(user);
+
 
 
   if (user === null) {
