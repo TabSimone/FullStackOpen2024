@@ -1,29 +1,25 @@
 import blogService from '../services/blogService';
-import { useState, useEffect } from 'react';
-import loginService from '../services/login';
-import { useSelector, useDispatch } from 'react-redux'
-import { showNotificationWithTimeout } from '../reducers/notificationReducer'
-
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { showNotificationWithTimeout } from '../reducers/notificationReducer';
+import { appendblog } from '../reducers/blogReducer';
 
 const useBlog = (user) => {
   const dispatch = useDispatch();
-
-  const [blogs, setBlogs] = useState([]); // Stato per gestire i blog
+  const blogs = useSelector(state => state.blogs);
 
   const writeAttributes = async (newBlog) => {
-
     try {
-      console.log('sono entrato')
-      console.log(user.token)
-      console.log(' ho scritto user token')
+      console.log('sono entrato');
+      console.log(user.token);
+      console.log(' ho scritto user token');
+      
       await blogService.create(newBlog, user.token);
       console.log('Entered writeAttributes!');
 
       dispatch(showNotificationWithTimeout({ message: 'Blog created successfully', time: 2 }));
-      const updatedBlogs = await blogService.getAll();
-      setBlogs(updatedBlogs);
+      
+      dispatch(appendblog(newBlog)); 
+
     } catch (error) {
       console.error('Error creating blog:', error.response ? error.response.data : error.message);
       dispatch(showNotificationWithTimeout({ message: 'Failed to create blog. Please try again', time: 2 }));
@@ -33,36 +29,31 @@ const useBlog = (user) => {
   const increaseLikes = async (blogId) => {
     console.log("Entered increase likes");
     console.log(user.token);
-    //console.log(blogId)
 
-    // Aumenta i "likes"
     await blogService.increaseLikes(blogId, user.token);
 
     // Ottieni tutti i blog e ordina per "likes"
-    blogService.getAll().then(blogs => {
-      // Ordina i blog in base ai "likes" in ordine decrescente (dal più alto al più basso)
-      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+    const updatedBlogs = await blogService.getAll();
+    const sortedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes);
 
-      // Imposta lo stato con i blog ordinati
-      setBlogs(sortedBlogs);
-    });
+    // 🚀 Aggiorna Redux con i blog ordinati
+    dispatch(setBlogs(sortedBlogs));
   };
 
   const deleteBlog = async (blogId) => {
-    console.log(user.token)
-    console.log(blogId)
+    console.log(user.token);
+    console.log(blogId);
+
     await blogService.deleteBlog(blogId, user.token);
-    console.log("sono passato")
-    blogService.getAll().then(blogs => setBlogs(blogs));
+    console.log("Blog eliminato con successo!");
+
+    const updatedBlogs = await blogService.getAll();
+    dispatch(setBlogs(updatedBlogs));
   };
 
-
-
   return {
-    blogs, writeAttributes, increaseLikes, deleteBlog, setBlogs
-  }
-}
+    blogs, writeAttributes, increaseLikes, deleteBlog
+  };
+};
 
-
-
-export default useBlog
+export default useBlog;
