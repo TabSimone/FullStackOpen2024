@@ -5,13 +5,13 @@ import ActionButton from './components/Button';
 import Notification from './components/Notification';
 import CreateBlogForm from './components/CreateBlogForm';
 import Togglable from './components/Togglable';
-import useUser from './hooks/useUser';
 import useBlog from './hooks/useBlog';
 import LoginForm from './components/LoginForm';
 import { Provider } from 'react-redux';
 import store from './store'; // Il tuo store Redux
 import { initializeblogs} from './reducers/blogReducer';
 import { useSelector, useDispatch } from 'react-redux'
+import { checkUser, handleLogin, handleLogout} from './reducers/userReducer';
 
 
 const App = () => {
@@ -25,8 +25,16 @@ const App = () => {
     dispatch(initializeblogs())
   }, [dispatch])
 
+  const user = useSelector(state => state.user)
+   // Inizializza il user quando il componente viene montato
+   useEffect(() => {
+    dispatch(checkUser())
+  }, [dispatch])
 
-  const { user, handleLogin, handleLogout } = useUser();
+
+
+  //const { user, handleLogin, handleLogout } = useUser();
+
   const { writeAttributes, increaseLikes, deleteBlog, setBlogs } = useBlog(user);
 
 
@@ -37,7 +45,7 @@ const App = () => {
         <Provider store={store}>
           <Notification />
         </Provider>
-        <LoginForm handleLogin={handleLogin} />
+        <LoginForm/>
       </div>
     );
   }
@@ -45,7 +53,7 @@ const App = () => {
   return (
     <>
       <div style={{ marginBottom: '20px' }}>
-        Welcome, {user.username}!<ActionButton onClick={() => handleLogout()} buttonText="Logout" />
+        Welcome, {user.username}!<ActionButton onClick={() => dispatch(handleLogout())} buttonText="Logout" />
       </div>
 
       {/* Add new blog */}
