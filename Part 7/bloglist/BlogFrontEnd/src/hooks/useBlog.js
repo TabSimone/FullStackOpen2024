@@ -1,7 +1,7 @@
 import blogService from '../services/blogService';
 import { useSelector, useDispatch } from 'react-redux';
 import { showNotificationWithTimeout } from '../reducers/notificationReducer';
-import { appendblog } from '../reducers/blogReducer';
+import { appendblog, setBlogs } from '../reducers/blogReducer';
 
 const useBlog = (user) => {
   const dispatch = useDispatch();
