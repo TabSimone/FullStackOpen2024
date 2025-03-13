@@ -7,6 +7,8 @@ import LoginForm from './components/LoginForm';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Users from './pages/Users';  
 import Home from './pages/Home';  
+import User from './pages/User';  
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,8 @@ const App = () => {
         <Notification />
         <Routes>
            <Route path="/" element={<Home />} />
-          <Route path="/users" element={<Users />} />
+           <Route path="/users/:id" element={<User/>} />
+           <Route path="/users" element={<Users />} />
         </Routes>
       </div>
   );

@@ -2,6 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { initializeblogs  } from '../reducers/blogReducer'; 
+import { Link } from 'react-router-dom';  // Assicurati che questa importazione ci sia
+
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const Users = () => {
       <ul>
         {Object.entries(authorCount).map(([author, count]) => (
           <li key={author}>
-            {author}: {count} {count === 1 ? 'Blog' : 'Blogs'}
+             <Link to={`/users/${encodeURIComponent(author)}`}>{author}: {count} {count === 1 ? 'Blog' : 'Blogs'} </Link>
           </li>
         ))}
       </ul>
