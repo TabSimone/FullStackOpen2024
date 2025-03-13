@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Users from './pages/Users';  
 import Home from './pages/Home';  
 import User from './pages/User';  
+import Blogs from './pages/Blogs';  
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
            <Route path="/" element={<Home />} />
            <Route path="/users/:id" element={<User/>} />
            <Route path="/users" element={<Users />} />
+           <Route path="/blogs" element={<Blogs />} />
         </Routes>
       </div>
   );

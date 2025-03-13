@@ -20,6 +20,7 @@ const Navbar = () => {
       <nav>
         <Link style={padding} to="/">Home</Link>
         <Link style={padding} to="/users">Users</Link>
+        <Link style={padding} to="/blogs">Blogs</Link>
       </nav>
     </div>
   );
