@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { checkUser, handleLogin, handleLogout } from '../reducers/userReducer';
 import { useSelector, useDispatch } from 'react-redux'
 import ActionButton from "./Button";
+import Users from '../pages/Users';
 
 
 const Navbar = () => {

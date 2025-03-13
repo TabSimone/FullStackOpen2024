@@ -1,18 +1,34 @@
-// src/pages/User.jsx
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { initializeblogs  } from '../reducers/blogReducer'; 
 
-// Esportiamo un oggetto users
-export const users = [
-  { id: 1, name: 'Alice' },
-  { id: 2, name: 'Bob' },
-  { id: 3, name: 'Charlie' },
-];
-
-// Componente User che renderizza "Hello World"
 const Users = () => {
-  return (
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeblogs())
+  }, [dispatch])
+
+  const blogs = useSelector(state => state.blogs)
+
+  const authorCount = blogs.reduce((acc, blog) => {
+    // Se l'autore esiste già nell'oggetto, incrementa il contatore, altrimenti inizializza a 1
+    acc[blog.author] = (acc[blog.author] || 0) + 1;
+    return acc;
+  }, {});
+
+
+    return (
     <div>
-      <h1>Hello World</h1>
+      <h2>Author Blog Counts</h2>
+      <ul>
+        {Object.entries(authorCount).map(([author, count]) => (
+          <li key={author}>
+            {author}: {count} {count === 1 ? 'Blog' : 'Blogs'}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
