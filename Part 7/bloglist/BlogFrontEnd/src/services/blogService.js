@@ -78,4 +78,31 @@ const deleteBlog = async (id, token) => {
   }
 }
 
-export default { getAll, create, update, increaseLikes, deleteBlog }
+const addComment = async (blogId, comment, token) => {
+  
+  console.log(`Making POST request to: ${baseUrl}/${blogId}`);
+
+  console.log("sono in blog service?")
+
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+    
+    // Poiché stiamo solo aggiornando i likes, non dovremmo aver bisogno di inviare altri dati
+    const response = await axios.post(
+      `${baseUrl}/${id}`, 
+      { }, 
+      config
+    );
+    
+    console.log('Response:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Errore completo:", error.response || error);
+    throw error;
+  }
+}
+
+export default { getAll, create, update, increaseLikes, deleteBlog, addComment }

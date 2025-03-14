@@ -43,6 +43,14 @@ export const upvoteblog = (content) => {
       const blogs = await blogsService.getAll()
       dispatch(setBlogs(blogs))
     }
-    
-  
 }
+
+export const addComment = (blogId, content) => {
+  return async dispatch => {
+    console.log("Dispatch ricevuto in addComment!");
+    console.log("Blog ID ricevuto:", blogId);
+    console.log("Comment ricevuto:", content);
+
+    await blogsService.addComment(blogId, content);
+  };
+};

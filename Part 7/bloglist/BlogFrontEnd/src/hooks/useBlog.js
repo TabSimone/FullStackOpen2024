@@ -1,7 +1,7 @@
 import blogService from '../services/blogService';
 import { useSelector, useDispatch } from 'react-redux';
 import { showNotificationWithTimeout } from '../reducers/notificationReducer';
-import { appendblog, setBlogs } from '../reducers/blogReducer';
+import { addComment, appendblog, setBlogs } from '../reducers/blogReducer';
 
 const useBlog = () => {
   const dispatch = useDispatch();
@@ -52,8 +52,15 @@ const useBlog = () => {
     dispatch(setBlogs(updatedBlogs));
   };
 
+  const addComment = async (blogId, comment) => {
+    console.log("Entered add Comment");
+    console.log(user.token);
+
+    await blogService.addComment(blogId, comment, user.token);
+  };
+
   return {
-    blogs, writeAttributes, increaseLikes, deleteBlog
+    blogs, writeAttributes, increaseLikes, deleteBlog, addComment
   };
 };
 

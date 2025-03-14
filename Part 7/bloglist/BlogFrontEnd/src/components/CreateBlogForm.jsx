@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import  useBlog  from '../hooks/useBlog'; 
+import { useSelector, useDispatch } from 'react-redux';
 
 const CreateBlogForm = () => {
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const { writeAttributes } = useBlog()
 
