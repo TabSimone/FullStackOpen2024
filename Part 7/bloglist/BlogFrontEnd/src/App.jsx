@@ -9,6 +9,7 @@ import Users from './pages/Users';
 import Home from './pages/Home';  
 import User from './pages/User';  
 import Blogs from './pages/Blogs';  
+import Blog from './pages/Blog';  
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
            <Route path="/users/:id" element={<User/>} />
            <Route path="/users" element={<Users />} />
            <Route path="/blogs" element={<Blogs />} />
+           <Route path="/blogs/:id" element={<Blog/>} />
         </Routes>
       </div>
   );

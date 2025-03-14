@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import Blog from './Blog'
+import  useBlog  from '../hooks/useBlog'; 
 
-const CreateBlogForm = ({ createBlog, user}) => {
+const CreateBlogForm = () => {
+
+  const { writeAttributes } = useBlog()
+
   // Stati per i valori dell'input
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
@@ -21,7 +24,7 @@ const CreateBlogForm = ({ createBlog, user}) => {
     };
 
 
-    createBlog(newBlog, user);
+    writeAttributes(newBlog, user);
 
     setNewAuthor('')
     setNewTitle('')

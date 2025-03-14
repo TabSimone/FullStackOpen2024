@@ -3,9 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { showNotificationWithTimeout } from '../reducers/notificationReducer';
 import { appendblog, setBlogs } from '../reducers/blogReducer';
 
-const useBlog = (user) => {
+const useBlog = () => {
   const dispatch = useDispatch();
   const blogs = useSelector(state => state.blogs);
+  const user = useSelector((state) => state.user);
 
   const writeAttributes = async (newBlog) => {
     try {
