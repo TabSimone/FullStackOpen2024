@@ -36,11 +36,11 @@ const Blog = () => {
         setComments([]);
       }
     };
-  
+
     if (blogId) {
       fetchComments();
     }
-    
+
   }, [blogId])
 
 
@@ -64,10 +64,13 @@ const Blog = () => {
         </div>
       </div>
       <br />
-      <form onSubmit={(event) => {
+      <form onSubmit={async (event) => {
         event.preventDefault();
-        addComment(blog.id, comment);
+        await addComment(blogId, comment);
         setComment('');
+
+        const updatedComments = await getComments(blogId);
+        setComments(updatedComments || []);
       }}>
         <div>
           <input
@@ -79,17 +82,17 @@ const Blog = () => {
         <button type="submit">Add comment</button>
       </form>
       <div>
-  <h2>Comments </h2>
-  {comments && comments.length > 0 ? (
-    comments.map(comment => (
-      <li key={comment.id}>
-        {comment.text}
-      </li>
-    ))
-  ) : (
-    <p>No comments yet</p>
-  )}
-</div>
+        <h2>Comments </h2>
+        {comments && comments.length > 0 ? (
+          comments.map(comment => (
+            <li key={comment.id}>
+              {comment.text}
+            </li>
+          ))
+        ) : (
+          <p>No comments yet</p>
+        )}
+      </div>
     </div>
   );
 };

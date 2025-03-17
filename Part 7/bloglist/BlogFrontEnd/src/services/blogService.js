@@ -109,7 +109,7 @@ const addComment = async (blogId, comment, token) => {
     }
     
     // Poiché stiamo solo aggiornando i likes, non dovremmo aver bisogno di inviare altri dati
-    const response = await axios.post(`${baseUrl}/${id}/comments`, {text: comment},  config);
+    const response = await axios.post(`${baseUrl}/${blogId}/comments`, {text: comment},  config);
 
     console.log('Response:', response.data);
     
