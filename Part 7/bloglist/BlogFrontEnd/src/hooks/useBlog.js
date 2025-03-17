@@ -52,15 +52,24 @@ const useBlog = () => {
     dispatch(setBlogs(updatedBlogs));
   };
 
+  const getComments = async (blogId) => {
+    console.log("Entered get Comment");
+    console.log(user.token);
+    
+
+    return  await blogService.getComments(blogId, user.token);
+  };
+
   const addComment = async (blogId, comment) => {
     console.log("Entered add Comment");
     console.log(user.token);
+
 
     await blogService.addComment(blogId, comment, user.token);
   };
 
   return {
-    blogs, writeAttributes, increaseLikes, deleteBlog, addComment
+    blogs, writeAttributes, increaseLikes, deleteBlog, getComments, addComment
   };
 };
 

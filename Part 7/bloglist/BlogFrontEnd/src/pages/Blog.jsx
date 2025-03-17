@@ -20,9 +20,29 @@ const Blog = () => {
 
   const blog = blogs.find(blog => blog.id === blogId);
 
-  const { increaseLikes, deleteBlog, addComment } = useBlog();
+  const { increaseLikes, deleteBlog, getComments, addComment } = useBlog();
 
   const [comment, setComment] = useState('');
+
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const commentsData = await getComments(blogId);
+        setComments(commentsData || []);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+        setComments([]);
+      }
+    };
+  
+    if (blogId) {
+      fetchComments();
+    }
+    
+  }, [blogId])
+
 
   if (!blog) {
     return <h2>Blog not found</h2>;
@@ -45,9 +65,9 @@ const Blog = () => {
       </div>
       <br />
       <form onSubmit={(event) => {
-        event.preventDefault(); 
+        event.preventDefault();
         addComment(blog.id, comment);
-        setComment(''); 
+        setComment('');
       }}>
         <div>
           <input
@@ -58,6 +78,18 @@ const Blog = () => {
         </div>
         <button type="submit">Add comment</button>
       </form>
+      <div>
+  <h2>Comments </h2>
+  {comments && comments.length > 0 ? (
+    comments.map(comment => (
+      <li key={comment.id}>
+        {comment.text}
+      </li>
+    ))
+  ) : (
+    <p>No comments yet</p>
+  )}
+</div>
     </div>
   );
 };
