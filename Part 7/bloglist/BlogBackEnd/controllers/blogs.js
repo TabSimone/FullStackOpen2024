@@ -3,6 +3,7 @@ const blogsRouter = express.Router();
 const Blog = require('../models/blog');
 const logger = require('../utils/logger');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const middleware = require('../utils/middleware');
@@ -87,6 +88,42 @@ blogsRouter.put('/api/blogs/:id', middleware.tokenExtractor, async (req, res) =>
       
   } catch (error) {
       res.status(500).json({ error: 'Errore durante l\'aggiornamento' });
+  }
+});
+
+// GET all blogs comment
+blogsRouter.get('/api/blogs/:id/comments', async (request, response, next) => {
+  try {
+    const { id } = request.params;
+  
+    const blog = await Blog.findById(id);
+    if (!blog) return response.status(404).json({ error: 'Blog non trovato' });
+
+    const comments = await Comment.find({ blogId: id })
+
+    return response.json(comments);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST a new blog comment
+blogsRouter.post('/api/blogs/:id/comments', async (request, response, next) => {
+  try {
+    const { id } = request.params;
+  
+    const blog = await Blog.findById(id);
+    if (!blog) return res.status(404).json({ error: 'Blog non trovato' });
+    
+    const comment = new Comment({
+      text: request.body.text,
+      blogId: id,
+    });
+
+    const result = await comment.save();
+    return response.status(201).json({ id: id, test: request.body });
+  } catch (error) {
+    next(error);
   }
 });
 
