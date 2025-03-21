@@ -2,6 +2,7 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v4: uuidv4 } = require('uuid');
 const { GraphQLError } = require('graphql');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -10,12 +11,14 @@ mongoose.set('strictQuery', false)
 
 require('dotenv').config()
 
+const JWT_SECRET = process.env.JWT_SECRET
 const MONGODB_URI = process.env.MONGODB_URI
 
 console.log('connecting to', MONGODB_URI)
 
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
 
 
 mongoose.connect(MONGODB_URI)
@@ -43,12 +46,21 @@ const typeDefs = `
     genres: [String]
   }
 
+  type User {
+  username: String!
+  id: ID!
+  }
+
+  type Token {
+  value: String!
+  }
 
   type Query {
   authorCount: Int!
   bookCount: Int!
   allBooks(author: String, genres: String): [Book!]
   allAuthors: [Author]!
+   me: User
   }
 
   type Mutation {
@@ -62,6 +74,13 @@ const typeDefs = `
     name: String!
     setBornTo: Int!
   ): Author
+  createUser(
+    username: String!
+  ): User
+  login(
+    username: String!
+    password: String!
+  ): Token
 }
 `
 
@@ -94,6 +113,50 @@ const resolvers = {
   },
 
   Mutation: {
+    createUser: async (root, args) => {
+      let user = await User.findOne({ username: args.username });
+
+      if (!user) {
+        const user = new User({ username: args.username })
+
+        return user.save()
+          .catch(error => {
+            throw new GraphQLError('Creating the user failed', {
+              extensions: {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: args.username,
+                error
+              }
+            })
+          })
+      } else {
+        throw new GraphQLError('User already exist', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.username,
+            error
+          }
+        })
+      }
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+  
+      if ( !user || args.password !== 'secret' ) {
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })        
+      }
+  
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+  
+      return { value: jwt.sign(userForToken, JWT_SECRET) }
+    },
     addBook: async (root, args) => {
       let author = await Author.findOne({ name: args.author });
 
