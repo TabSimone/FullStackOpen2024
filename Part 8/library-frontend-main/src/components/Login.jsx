@@ -1,60 +1,63 @@
-import { useState } from 'react'
-//import { useMutation  } from '@apollo/client'; // Apollo dependencies
-//import { CREATE_BOOK } from '../queries'
+import { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/client'
+import { LOGIN } from '../queries'
 
-const Login = (props) => {
+
+const LoginForm = (props) => {
+
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  //const [ createBook ] = useMutation(CREATE_BOOK)
+
+  const [ login, result ] = useMutation(LOGIN, {
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message)
+    }
+  })
 
 
-  // eslint-disable-next-line react/prop-types
-  if (!props.show) {
-    return null
-  }
+  useEffect(() => {
+    if ( result.data ) {
+      const token = result.data.login.value
+      props.setToken(token)
+      localStorage.setItem('user-token', token)
+      console.log("Settato token: ", token.toString() )
+      props.setPage("authors")
+    }
+  }, [result.data])
 
   const submit = async (event) => {
     event.preventDefault()
 
-    console.log('add book...')
+    login({ variables: { username, password } })
+  }
 
-    /*
-    const publishedToInt = parseInt(published, 10)
-
-    createBook({  variables: { title, publishedToInt , author, genres } })
-
-
-
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')*/
+  if (!props.show) {
+    return null
   }
 
   return (
     <div>
-      <h2>Login</h2>
       <form onSubmit={submit}>
+        <h2> Login </h2>
         <div>
-          username
-          <input
+          username <input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
-          password
-          <input
+          password <input
+            type='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">nmake login</button>
+        <button type='submit'>login</button>
       </form>
     </div>
   )
 }
 
-export default Login
+export default LoginForm
