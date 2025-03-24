@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client'; // Apollo dependencies
 import { EDIT_YEAR, ALL_AUTHORS } from '../queries'
 
@@ -66,34 +66,35 @@ const Authors = (props) => {
       </table>
       <br />
 
-
-      <div>
-        <form onSubmit={submit}>
-          <div>
-          <select onChange={(event) => setName(event.target.value)}>
-              {authors.map((author) => (
-                 <option value={author.name} key = {author.id} >{author.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            name
-            <input
-              value={name}
-              onChange={({ target }) => setName(target.value)}
-            />
-          </div>
-          <div>
-            year
-            <input
-              type="number"
-              value={year}
-              onChange={({ target }) => setYear(target.value)}
-            />
-          </div>
-          <button type="submit">edit year</button>
-        </form>
-      </div>
+      {props.token && (
+        <div>
+          <form onSubmit={submit}>
+            <div>
+              <select onChange={(event) => setName(event.target.value)}>
+                {authors.map((author) => (
+                  <option value={author.name} key={author.id} >{author.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              name
+              <input
+                value={name}
+                onChange={({ target }) => setName(target.value)}
+              />
+            </div>
+            <div>
+              year
+              <input
+                type="number"
+                value={year}
+                onChange={({ target }) => setYear(target.value)}
+              />
+            </div>
+            <button type="submit">edit year</button>
+          </form>
+        </div>
+      )}
     </div>
 
   );
