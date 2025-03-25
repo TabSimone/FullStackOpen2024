@@ -13,13 +13,9 @@ const Books = (props) => {
   const { data, loading, error, refetch: refetchBooks } = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre },
   });
-  
-  let resultGenres = useQuery(ALL_GENRES);
 
-  useEffect(() => {
-    console.log(selectedGenre);
-    refetchBooks()
-  }, [selectedGenre]);
+  let resultGenres = useQuery(ALL_GENRES);
+  
 
   if (loading || resultGenres.loading) {
     return <div>loading...</div>
