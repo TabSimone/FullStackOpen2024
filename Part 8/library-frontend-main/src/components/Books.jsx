@@ -10,7 +10,7 @@ const Books = (props) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [genreClicks, setGenreClicks] = useState({}); // Stato per il conteggio dei clic sui generi
 
-  const { data, loading, error } = useQuery(ALL_BOOKS, {
+  const { data, loading, error, refetch } = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre },
   });
 
@@ -23,9 +23,11 @@ const Books = (props) => {
   const books = data.allBooks;
   const genres = resultGenres.data.allGenres;
 
-  
+
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
+
+    refetch();
     
     setGenreClicks((prev) => {
       const updatedClicks = {
