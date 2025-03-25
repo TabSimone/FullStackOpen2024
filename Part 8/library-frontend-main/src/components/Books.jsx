@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'; // Apollo dependencies
-import { ALL_BOOKS, ALL_GENRES } from '../queries'
+import { ALL_BOOKS, ALL_GENRES, ALL_BOOKS_BY_GENRE } from '../queries'
 import { useEffect, useState } from 'react';
 
 
@@ -10,18 +10,22 @@ const Books = (props) => {
 
   const [selectedGenre, setSelectedGenre] = useState(null);
 
-  useEffect(() => {
-    console.log(selectedGenre);
-  }, [selectedGenre]);
-
-  let result = useQuery(ALL_BOOKS)
+  const { data, loading, error, refetch: refetchBooks } = useQuery(ALL_BOOKS, {
+    variables: { genre: selectedGenre },
+  });
+  
   let resultGenres = useQuery(ALL_GENRES);
 
-  if (result.loading || resultGenres.loading) {
+  useEffect(() => {
+    console.log(selectedGenre);
+    refetchBooks()
+  }, [selectedGenre]);
+
+  if (loading || resultGenres.loading) {
     return <div>loading...</div>
   }
 
-  const books = result.data.allBooks
+  const books = data.allBooks
   const genres = resultGenres.data.allGenres
 
   return (
