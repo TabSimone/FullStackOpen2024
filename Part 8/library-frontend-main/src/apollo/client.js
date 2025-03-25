@@ -1,13 +1,25 @@
-// src/apollo/client.js
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 
-import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
-// Configurazione del client Apollo
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('user-token')
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : null,
+    }
+  }
+})
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000',
+})
+
 const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'http://localhost:4000', // URL del tuo server GraphQL
-  }),
-  cache: new InMemoryCache(), // Configurazione della cache
-});
+  cache: new InMemoryCache(),
 
-export default client;
+  link: authLink.concat(httpLink)
+})
+
+export default client

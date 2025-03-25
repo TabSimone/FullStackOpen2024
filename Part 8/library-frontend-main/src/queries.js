@@ -23,6 +23,12 @@ export const ALL_BOOKS = gql`
   }
 `;
 
+export const ALL_GENRES = gql`
+  query {
+    allGenres
+  }
+`;
+
 export const CREATE_BOOK = gql`
 mutation createBook($title: String!, $published: Int, $author: String, $genres: [String]) {
   addBook(
@@ -32,9 +38,6 @@ mutation createBook($title: String!, $published: Int, $author: String, $genres: 
     genres: $genres
   ) {
     title
-    published
-    author
-    genres 
   }
 }
 `;

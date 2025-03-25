@@ -5,6 +5,9 @@ const LogoutForm = (props) => {
     event.preventDefault()
 
     props.setToken(null);
+    
+    localStorage.clear()
+    client.resetStore()
 
     props.setPage("authors")
   }

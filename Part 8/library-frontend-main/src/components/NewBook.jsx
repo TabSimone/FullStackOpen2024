@@ -1,64 +1,85 @@
-import { useState } from 'react'
-import { useMutation  } from '@apollo/client'; // Apollo dependencies
-import { CREATE_BOOK } from '../queries'
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { CREATE_BOOK } from '../queries';
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [published, setPublished] = useState('');
+  const [genre, setGenre] = useState('');
+  const [genres, setGenres] = useState([]);
 
-  const [ createBook ] = useMutation(CREATE_BOOK)
+  const [createBook, { loading, error }] = useMutation(CREATE_BOOK);
 
-
-  // eslint-disable-next-line react/prop-types
   if (!props.show) {
-    return null
+    return null;
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    console.log('add book...')
+    console.log('Submitting book...');
 
-    const publishedToInt = parseInt(published, 10)
+    // Convalida il titolo
+    if (title.length < 5) {
+      console.error('Title must be at least 5 characters long');
+      return;
+    }
 
-    createBook({  variables: { title, publishedToInt , author, genres } })
+    // Converti "published" in un numero intero
+    const publishedToInt = parseInt(published, 10);
+    if (isNaN(publishedToInt)) {
+      console.error('Invalid published year');
+      return;
+    }
 
+    try {
+      await createBook({
+        variables: {
+          title,
+          published: publishedToInt,
+          author,
+          genres: genres || [], // Usa un array vuoto se genres è undefined
+        },
+      });
 
+      console.log('Book created successfully');
 
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
-  }
+      // Resetta i campi del form
+      setTitle('');
+      setPublished('');
+      setAuthor('');
+      setGenres([]);
+      setGenre('');
+    } catch (err) {
+      console.error('Error creating book:', err.message);
+    }
+  };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
-    setGenre('')
-  }
+    setGenres(genres.concat(genre));
+    setGenre('');
+  };
 
   return (
     <div>
       <form onSubmit={submit}>
         <div>
-          title
+          Title:
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
-          author
+          Author:
           <input
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
-          published
+          Published:
           <input
             type="number"
             value={published}
@@ -66,19 +87,24 @@ const NewBook = (props) => {
           />
         </div>
         <div>
+          Genre:
           <input
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
           <button onClick={addGenre} type="button">
-            add genre
+            Add genre
           </button>
         </div>
-        <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <div>Genres: {genres.join(', ')}</div>
+        <button type="submit">Create book</button>
       </form>
-    </div>
-  )
-}
 
-export default NewBook
+      {/* Mostra eventuali errori */}
+      {error && <p>Error: {error.message}</p>}
+      {loading && <p>Loading...</p>}
+    </div>
+  );
+};
+
+export default NewBook;

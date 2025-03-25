@@ -59,6 +59,7 @@ const typeDefs = `
   authorCount: Int!
   bookCount: Int!
   allBooks(author: String, genres: String): [Book!]
+  allGenres: [String]
   allAuthors: [Author]!
    me: User
   }
@@ -111,6 +112,10 @@ const resolvers = {
     },
     allAuthors: async () => {
       return await Author.find({});
+    },
+    allGenres: async () => {
+      const genres = await Book.distinct('genres'); // Ottieni tutti i generi univoci
+      return genres
     }
   },
 
@@ -165,8 +170,21 @@ const resolvers = {
   
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
-    addBook: async (context, root, args) => {
+    addBook: async (root, args, context) => {
+      console.log("Received arguments:", args);
+
       const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError('no current user', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        });
+      }
+      
+
+      console.log("mi fermo prima")
 
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
@@ -212,7 +230,7 @@ const resolvers = {
       }
     },
 
-    editAuthor: async (context, root, args) => {
+    editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
 
       if (!currentUser) {
