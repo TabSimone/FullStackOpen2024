@@ -11,7 +11,6 @@ const cors = require('cors');
 const http = require('http');
 const { WebSocketServer } = require('ws');
 const { useServer } = require('graphql-ws/lib/use/ws');
-const { PubSub } = require('graphql-subscriptions');
 
 // Importa le definizioni del tipo e i resolver
 const typeDefs = require('./schema');
@@ -38,7 +37,6 @@ mongoose.connect(MONGODB_URI)
     console.error('Error connecting to MongoDB:', error.message);
   });
 
-const pubsub = new PubSub();
 
 // Funzione per avviare il server
 const start = async () => {
@@ -49,7 +47,7 @@ const start = async () => {
 
   const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/graphql',
+    path: '/',
   });
 
   const serverCleanup = useServer({
@@ -68,7 +66,7 @@ const start = async () => {
             extensions: { code: 'UNAUTHENTICATED' },
           });
         }
-        return { currentUser, pubsub };
+        return { currentUser };
       } catch (error) {
         throw new GraphQLError('Authentication failed', {
           extensions: { code: 'UNAUTHENTICATED' },
@@ -119,7 +117,7 @@ const start = async () => {
             });
           }
 
-          return { currentUser, pubsub };
+          return { currentUser };
         } catch (error) {
           console.error('Error in context creation:', error.message);
           throw new GraphQLError('Authentication failed', {
@@ -133,7 +131,7 @@ const start = async () => {
   const PORT = 4000;
   httpServer.listen(PORT, () => {
     console.log(`Server is now running on http://localhost:${PORT}`);
-    console.log(`Subscriptions are running on ws://localhost:${PORT}/graphql`);
+    console.log(`Subscriptions are running on ws://localhost:${PORT}`);
   });
 };
 
