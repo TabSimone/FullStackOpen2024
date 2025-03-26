@@ -9,6 +9,9 @@ const { makeExecutableSchema } = require('@graphql-tools/schema');
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const { WebSocketServer } = require('ws');
+const { useServer } = require('graphql-ws/lib/use/ws');
+const { PubSub } = require('graphql-subscriptions');
 
 // Importa le definizioni del tipo e i resolver
 const typeDefs = require('./schema');
@@ -35,21 +38,64 @@ mongoose.connect(MONGODB_URI)
     console.error('Error connecting to MongoDB:', error.message);
   });
 
+const pubsub = new PubSub();
+
 // Funzione per avviare il server
 const start = async () => {
   const app = express();
   const httpServer = http.createServer(app);
 
-  // Crea un'istanza di ApolloServer
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+  });
+
+  const serverCleanup = useServer({
+    schema,
+    context: async (ctx) => {
+      const auth = ctx.connectionParams?.authorization;
+      if (!auth || !auth.startsWith('Bearer ')) {
+        return {};
+      }
+
+      try {
+        const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
+        const currentUser = await User.findById(decodedToken.id);
+        if (!currentUser) {
+          throw new GraphQLError('User not found', {
+            extensions: { code: 'UNAUTHENTICATED' },
+          });
+        }
+        return { currentUser, pubsub };
+      } catch (error) {
+        throw new GraphQLError('Authentication failed', {
+          extensions: { code: 'UNAUTHENTICATED' },
+        });
+      }
+    },
+  }, wsServer);
+
   const server = new ApolloServer({
-    schema: makeExecutableSchema({ typeDefs, resolvers }),
-    introspection: true, // Abilita l'introspezione
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    schema,
+    introspection: true,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
 
   await server.start();
 
-  // Middleware Express per gestire le richieste GraphQL
   app.use(
     '/',
     cors({
@@ -61,16 +107,11 @@ const start = async () => {
       context: async ({ req }) => {
         try {
           const auth = req ? req.headers.authorization : null;
-
-          // Se non c'è un token, restituisci un contesto vuoto
           if (!auth || !auth.startsWith('Bearer ')) {
             return {};
           }
 
-          // Verifica il token JWT
           const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
-
-          // Recupera l'utente corrente dal database
           const currentUser = await User.findById(decodedToken.id);
           if (!currentUser) {
             throw new GraphQLError('User not found', {
@@ -78,7 +119,7 @@ const start = async () => {
             });
           }
 
-          return { currentUser };
+          return { currentUser, pubsub };
         } catch (error) {
           console.error('Error in context creation:', error.message);
           throw new GraphQLError('Authentication failed', {
@@ -89,10 +130,10 @@ const start = async () => {
     }),
   );
 
-  // Avvia il server HTTP
   const PORT = 4000;
   httpServer.listen(PORT, () => {
     console.log(`Server is now running on http://localhost:${PORT}`);
+    console.log(`Subscriptions are running on ws://localhost:${PORT}/graphql`);
   });
 };
 
