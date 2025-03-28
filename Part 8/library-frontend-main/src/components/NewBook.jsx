@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { CREATE_BOOK } from '../queries';
+import { ALL_BOOKS, CREATE_BOOK } from '../queries';
+
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('');
@@ -9,7 +10,12 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
 
-  const [createBook, { loading, error }] = useMutation(CREATE_BOOK);
+  const [createBook, { loading, error }] = useMutation(CREATE_BOOK, {
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message)
+    },
+  }
+  );
 
   if (!props.show) {
     return null;

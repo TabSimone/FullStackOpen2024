@@ -5,6 +5,9 @@ const LogoutForm = (props) => {
     event.preventDefault()
 
     props.setToken(null);
+    localStorage.removeItem('user-token')
+
+    props.setPage("authors")
     
     localStorage.clear()
     client.resetStore()

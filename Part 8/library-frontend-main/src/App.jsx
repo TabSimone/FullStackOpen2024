@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
 import LogoutForm from "./components/Logout";
 import Recommended from "./components/Recommended";
+import {  useSubscription } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from "./queries";
+
+
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -12,6 +16,23 @@ const App = () => {
   const [token, setToken] = useState(null)
 
   const [favoriteGenre, setfavoriteGenre] = useState(null)
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem('user-token')
+    if (savedToken) {
+      setToken(savedToken)
+    }
+  }, [])
+  
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      console.log(`${addedBook.title} added`)
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+    }
+  })
 
   return (
     <div>
