@@ -37,6 +37,7 @@ mongoose.connect(MONGODB_URI)
     console.error('Error connecting to MongoDB:', error.message);
   });
 
+mongoose.set('debug', true);
 
 // Funzione per avviare il server
 const start = async () => {

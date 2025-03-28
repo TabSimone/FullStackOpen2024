@@ -7,6 +7,7 @@ const User = require('./models/user')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const { PubSub } = require('graphql-subscriptions')
+const bookCountLoader = require('./loaders/bookCountLoader');
 
 
 
@@ -48,7 +49,7 @@ const resolvers = {
 
   Author: {
     bookCount: async (author) => {
-      return await Book.countDocuments({ author: author._id });
+      return await bookCountLoader.load(author._id)
     },
   },
 
